@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">  
+        <title> SEVA </title>  
+        <style>   
+            body {  
+                font-family: Calibri, Helvetica, sans-serif;  
+                background-color: rgb(73, 73, 73);
+                color: rgb(255, 255, 255); 
+            }
+            h1 {
+                background-color: #414141;
+                padding: 11px 20px;
+                width: 100px;
+                border-radius: 10px;
+            }
+            form {   
+                width: 500px;
+            }
+            form p {
+                background-color: #414141;
+                padding: 11px 20px;
+                width: 70%;
+                float: left;
+                margin-top: 2px;
+                border-radius: 10px;
+            }
+            input, label, button {
+                margin-bottom: 10px;
+                padding: 12px 20px;
+                border-radius: 10px;
+            }
+            input[type=text], input[type=password] { 
+                font-size: large;
+                font-weight: bold;
+                color: rgb(255, 255, 255);
+                background-color: #2e2e2e;
+                margin: 10px 0px;  
+                width: 100%;  
+                box-sizing: border-box;   
+            }
+            input[type=submit], button{  
+                float: right;
+                background-color: #2e2e2e;
+                color: rgb(255, 255, 255);   
+            } 
+            input[type=radio] {
+                opacity: 0;
+                width: 0;    
+            }
+            label {
+                float: left;
+                background-color: #414141;
+                margin-right: 3px;
+                padding: 12px 20px;
+            }
+            input[type="radio"]:checked + label {
+                background-color: #2e2e2e;
+            }
+            input[type="radio"]:hover + label {
+                opacity: 0.8;
+            }
+            input[type="radio"]:focus + label {
+                background-color: #2e2e2e;
+            }
+            table {
+                margin: 15px;
+                /* font-size: 0.9em; */
+                min-width: 50%;
+            }
+            table thead tr {
+                background-color: #2c2c2c;
+                color: #ffffff;
+                text-align: left;
+            }
+            table th, table td {
+                padding: 8px 15px;
+            }
+            table tbody tr {
+                border-bottom: 1px solid #dddddd;
+            }
+
+            table tbody tr:nth-of-type(even) {
+                background-color: #414141;
+            }
+
+            table tbody tr:last-of-type {
+                border-bottom: 2px solid #000000;
+            }
+            table tbody tr.active-row {
+                font-weight: bold;
+                color: #000000;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+        {% block content %}
+        {% endblock content %}
+        </center>
+    </body>
+</html>

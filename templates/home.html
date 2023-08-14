@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!-- Logout -->
+<form action="/logout/" method="POST">{% csrf_token %}  
+    <p>Logged In : <i><b>{{ user.badge }}</b> &nbsp;&nbsp;&nbsp;&nbsp; {{ date }}</i></p>
+    <button type="submit">Log Out</button>
+</form>
+
+<!-- Clock or Query Info -->
+<form action="" method="GET">
+    <input type="text" placeholder="Enter Badge or Vehicle Number" name="query" />
+    <input type="radio" id="in" name="clock" value=1></input>
+    <label for="in">Clock In</label>
+    <input type="radio" id="out" name="clock" value="0"></input>
+    <label for="out">Clock Out</label>
+    <input type="submit" />
+</form>
+
+<!-- Spacer -->
+<div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
+
+<!-- Display User Info -->
+{% if users|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="6">USER INFO</th>
+    </tr>
+    <tr>
+        <th>Full Name</th>
+        <th>Badge</th>
+        <th>Centre</th>
+        <th>Department</th>
+        <th>Gender</th>
+        <th>Contact Number</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+    <tr>
+        <td>{{ user.full_name }}</td>
+        <td>{{ user.badge }}</td>
+        <td>{{ user.centre }}</td>
+        <td>{{ user.department }}</td>
+        <td>{{ user.gender }}</td>
+        <td>{{ user.contact_number }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+<!-- Display Vehicle Info -->
+{% if vehicles|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="4">VEHICLE INFO</th>
+    </tr>
+    <tr>
+        <th>Custom Id</th>
+        <th>Vehicle No</th>
+        <th>User</th>
+        <th>Type</th>
+    </tr>
+</thead>
+<tbody>
+    {% for vehicle in vehicles %}
+    <tr>
+        <td>{{ vehicle.custom_id }}</td>
+        <td>{{ vehicle.vehicle_no }}</td>
+        <td>{{ vehicle.user.badge }}</td>
+        <td>{{ vehicle.type }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+<!-- Display Info of User Clocked In -->
+{% if movement_in|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="4">CLOCKED IN : {{movement_in|length}}</th>
+    </tr>
+    <tr>
+        <th>Badge</th>
+        <th>Vehicle No</th>
+        <th>Date</th>
+        <th>In Time</th>
+    </tr>
+</thead>
+<tbody>
+    {% for mov in movement_in %}
+    <tr>
+        <td>{{ mov.user.badge }}</td>
+        <td>{{ mov.vehicle.vehicle_no }}</td>
+        <td>{{ mov.date }}</td>
+        <td>{{ mov.in_time }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+<!-- Display day's total attendence -->
+{% if movement_all|length > 0 %}
+<table>
+    <thead>
+    <tr>
+        <th colspan="5">TODAY ATTENDENCE : {{movement_all|length}}</th>
+    </tr>
+    <tr>
+        <th>Badge</th>
+        <th>Vehicle No</th>
+        <th>Date</th>
+        <th>In Time</th>
+        <th>Out Time</th>
+    </tr>
+</thead>
+<tbody>
+    {% for mov in movement_all %}
+    <tr>
+        <td>{{ mov.user.badge }}</td>
+        <td>{{ mov.vehicle.vehicle_no }}</td>
+        <td>{{ mov.date }}</td>
+        <td>{{ mov.in_time }}</td>
+        <td>{{ mov.out_time }}</td>
+    </tr>
+    {% endfor %}
+</tbody>
+</table>
+{% endif %}
+
+{% endblock content %}
