@@ -28,12 +28,12 @@ def home(request):
         if "query" in request.GET:
             query = request.GET.get("query")
 
-            vehicles = Vehicle.objects.filter(vehicle_no=query)
+            vehicles = Vehicle.objects.filter(vehicle_no=query.upper())
             if len(vehicles) > 0:
                 for vehicle in vehicles:
                     users.append(vehicle.user)
             else:
-                users = User.objects.filter(badge=query)
+                users = User.objects.filter(badge=query.lower())
                 for user in users:
                     vehicles = Vehicle.objects.filter(user=user)
             if len(users) == 0:
