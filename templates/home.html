@@ -141,14 +141,13 @@
         <table>
             <thead>
             <tr>
-                <th colspan="4">CLOCKED IN : {{movement_in|length}}</th>
+                <th colspan="5">CLOCKED IN : {{movement_in|length}}</th>
             </tr>
             <tr>
                 <th>Centre</th>
                 <th>Badge</th>
                 <th>Vehicle No</th>
                 <th>Type</th>
-                <th>Date</th>
                 <th>In Time</th>
             </tr>
         </thead>
@@ -159,7 +158,6 @@
                 <td>{{ mov.user.badge }}</td>
                 <td>{{ mov.vehicle.vehicle_no }}</td>
                 <td>{{ mov.vehicle.type }}</td>
-                <td>{{ mov.date }}</td>
                 <td>{{ mov.in_time }}</td>
             </tr>
             {% endfor %}
@@ -175,7 +173,7 @@
         <table>
             <thead>
             <tr>
-                <th colspan="5">TODAY ATTENDENCE : {{movement_all|length}}</th>
+                <th colspan="6">TODAY ATTENDENCE : {{movement_all|length}}</th>
             </tr>
             <tr>
                 <th>Centre</th>
