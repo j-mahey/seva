@@ -16,7 +16,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ["badge", "full_name", "gender", "contact_number"]
+        fields = ["badge", "full_name", "gender", "contact_number", "centre", "department"]
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -30,6 +30,20 @@ class UserCreationForm(forms.ModelForm):
         # Save the provided password in hashed format
         user = super().save(commit=False)
         user.set_password(self.cleaned_data["password1"])
+        if commit:
+            user.save()
+        return user
+
+
+class NormUserCreationForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ["badge", "full_name", "gender", "contact_number", "centre", "department"]
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        user = super().save(commit=False)
         if commit:
             user.save()
         return user

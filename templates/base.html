@@ -1,73 +1,138 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">  
         <title> SEVA </title>  
         <style>   
             body {  
                 font-family: Calibri, Helvetica, sans-serif;  
-                background-color: rgb(73, 73, 73);
+                background-color: rgb(100, 100, 100);
                 color: rgb(255, 255, 255); 
             }
-            h1 {
-                background-color: #414141;
-                padding: 11px 20px;
-                width: 100px;
+            .logout p, button{
+                display: inline-block;
+                padding: 1rem;
+                background-color: rgb(70, 70, 70);
                 border-radius: 10px;
             }
-            form {   
-                width: 500px;
+            .logout p {
+                width: 70%
             }
-            form p {
-                background-color: #414141;
-                padding: 11px 20px;
-                width: 70%;
-                float: left;
-                margin-top: 2px;
+            .login {
+                width: 100%;
+            }
+            .login h1 {
+                background-color: rgb(70, 70, 70);
                 border-radius: 10px;
+                padding: 1rem;
             }
-            input, label, button {
-                margin-bottom: 10px;
-                padding: 12px 20px;
+            .login input[type=text], input[type=password] {
+                border: none;
+                display: inline-block;
+                width: 175px;
                 border-radius: 10px;
-            }
-            input[type=text], input[type=password] { 
-                font-size: large;
-                font-weight: bold;
+                align-items: center;
+                padding: 0.8rem;
+                margin: 0.2rem 0rem;
                 color: rgb(255, 255, 255);
-                background-color: #2e2e2e;
-                margin: 10px 0px;  
-                width: 100%;  
-                box-sizing: border-box;   
+                background-color: rgb(50, 50, 50);
             }
-            input[type=submit], button{  
-                float: right;
-                background-color: #2e2e2e;
-                color: rgb(255, 255, 255);   
-            } 
+            form {
+                width: 500px
+            }
+            form input[type=text] {
+                width: 100%;
+            }
+            form input[type=text], input[type=password], input[type=submit], select, button {
+                border: none;
+                border-radius: 10px;
+                padding: 0.8rem;
+                margin: 0.2rem 0rem;
+                color: rgb(255, 255, 255);
+                background-color: rgb(50, 50, 50);
+            }
+            form input[type=text] {
+                width: 96%;
+                padding: 2%;
+            }
             input[type=radio] {
-                opacity: 0;
-                width: 0;    
+                display: none; 
             }
-            label {
-                float: left;
-                background-color: #414141;
-                margin-right: 3px;
-                padding: 12px 20px;
+            .tabs {
+                display: flex;
+                flex-wrap: wrap;
             }
-            input[type="radio"]:checked + label {
-                background-color: #2e2e2e;
+            .tabs-label {
+                order: 1;
+                display: flex;
+                cursor: pointer;
+                padding: 10px 15px;
+                margin-right: 0.2rem;
+                background-color: black;
             }
-            input[type="radio"]:hover + label {
+            .tab.create label  {
+                text-align: right;
+                width: 28%;
+                border: none;
+                background-color: rgb(70, 70, 70);
+            }
+            .tab.create input[type=text]  {
+                width: 55%;
+            }
+            .tab.create form  {
+                padding: 20px;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+                border-radius: 10px;
+            }
+            .tab.create field {
+                display: block;
+            }
+            .tabs form label {
+                display: inline-block;
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+                border-radius: 10px;
+                padding: 0.6rem;
+                margin: 0.2rem 0rem;
+                color: rgb(255, 255, 255);
+                background-color: rgb(60, 60, 60);
+            }
+            .tabs form input[type=submit] {
+                float: right;
+            }
+            .tabs form input[type=submit]:hover {
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+            }
+            .tabs form input[type=submit]:focus {
+                background-color: rgb(30, 30, 30);
+            }
+            .tabs form input[type="radio"]:checked + label {
+                background-color: rgb(40, 40, 40);
+            }
+            .tabs form input[type="radio"]:hover + label {
                 opacity: 0.8;
             }
-            input[type="radio"]:focus + label {
+            .tabs form input[type="radio"]:focus + label {
                 background-color: #2e2e2e;
+            }
+            .tabs input[type="radio"]:checked + label {
+                background-color: rgb(70, 70, 70);
+            }
+            .tabs input[type="radio"]:checked + label + .tab {
+                display: inline-block;
+            }
+            .tabs .tab {
+                order: 9;
+                flex-grow: 1;
+                width: 100%;
+                display: none;
+                padding: 1rem;
+                background-color: rgb(70, 70, 70);
+                box-shadow: -10px 10px 0px 0px black;  
             }
             table {
                 margin: 15px;
-                /* font-size: 0.9em; */
-                min-width: 50%;
             }
             table thead tr {
                 background-color: #2c2c2c;
@@ -77,27 +142,13 @@
             table th, table td {
                 padding: 8px 15px;
             }
-            table tbody tr {
-                border-bottom: 1px solid #dddddd;
-            }
-
             table tbody tr:nth-of-type(even) {
-                background-color: #414141;
-            }
-
-            table tbody tr:last-of-type {
-                border-bottom: 2px solid #000000;
-            }
-            table tbody tr.active-row {
-                font-weight: bold;
-                color: #000000;
+                background-color: rgb(60, 60, 60);
             }
         </style>
     </head>
     <body>
-        <center>
         {% block content %}
         {% endblock content %}
-        </center>
     </body>
 </html>

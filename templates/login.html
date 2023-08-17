@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1><i>SEVA</i></h1>
-<form method="POST">{% csrf_token %}  
+<form class="login" method="POST">{% csrf_token %}  
+    <h1><i>SEVA</i></h1>
     <div class="container">   
         <input type="text" placeholder="Badge" name="badge" required>  
         <input type="password" placeholder="Password" name="password" required>  
-        <input type="submit" />
+        <button type="submit" value="login"> Login </button>
     </div>   
 </form>
 {% endblock content %}
