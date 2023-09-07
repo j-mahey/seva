@@ -2,125 +2,116 @@
 <html>
     <head>
         <title> SEVA </title>  
-        <style>   
+        <style>
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ ALL */
             body {  
                 font-family: Calibri, Helvetica, sans-serif;  
                 background-color: rgb(100, 100, 100);
                 color: rgb(255, 255, 255); 
             }
-            .logout p, button{
-                display: inline-block;
-                padding: 1rem;
-                background-color: rgb(70, 70, 70);
-                border-radius: 10px;
+            button, input, select{
+                color: rgb(255, 255, 255); 
+                background-color: rgb(50, 50, 50);
+                padding: 0.5rem;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+                margin: 0.2rem;
             }
-            .logout p {
-                width: 70%
+            form {
+                width: 700px
             }
+
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ LOGIN */
             .login {
                 width: 100%;
             }
             .login h1 {
                 background-color: rgb(70, 70, 70);
-                border-radius: 10px;
                 padding: 1rem;
             }
-            .login input[type=text], input[type=password] {
-                border: none;
+            .login input[type=text], .login input[type=password] {
                 display: inline-block;
-                width: 175px;
-                border-radius: 10px;
-                align-items: center;
-                padding: 0.8rem;
-                margin: 0.2rem 0rem;
+                padding: 0.5rem;
                 color: rgb(255, 255, 255);
                 background-color: rgb(50, 50, 50);
             }
-            form {
-                width: 500px
-            }
-            form input[type=text] {
+
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ LOGOUT */
+            .logout {
+                position: fixed;
+                top: 0;
+                left: 0;
                 width: 100%;
+                background-color: rgb(30, 30, 30);
             }
-            form input[type=text], input[type=password], input[type=submit], select, button {
-                border: none;
-                border-radius: 10px;
-                padding: 0.8rem;
-                margin: 0.2rem 0rem;
-                color: rgb(255, 255, 255);
-                background-color: rgb(50, 50, 50);
+            .logout p {
+                display: inline-block;
+                padding: 0.5rem;
             }
-            form input[type=text] {
-                width: 96%;
-                padding: 2%;
+            .logout .fail {
+                color: #FF0000;
             }
-            input[type=radio] {
-                display: none; 
+            .logout .success {
+                color: #33FF3C;
             }
+
+            .logout button{
+                display: inline-block;
+                padding: 0.5rem;;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+            }
+            .logout button:hover {
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+            }
+            .logout button:focus {
+                background-color: rgb(30, 30, 30);
+            }
+
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ SEARCH */
+            .search {
+                margin-top: 80px;
+                padding: 20px;
+                background-color: rgb(70, 70, 70);
+            }
+            .search input[type=text] {
+                width: 84%;
+            }
+            .search button:hover {
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+            }
+            .search button:focus {
+                background-color: rgb(30, 30, 30);
+            }
+            .clock-form {
+                margin: 20px 0px;
+                padding: 20px;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+            }
+            .clock-form button {
+                float: right;
+            }
+
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ TABS */
             .tabs {
                 display: flex;
                 flex-wrap: wrap;
             }
-            .tabs-label {
+            .tabs-select {
                 order: 1;
                 display: flex;
                 cursor: pointer;
                 padding: 10px 15px;
                 margin-right: 0.2rem;
-                background-color: black;
-            }
-            .tab.create label  {
-                text-align: right;
-                width: 28%;
-                border: none;
-                background-color: rgb(70, 70, 70);
-            }
-            .tab.create input[type=text]  {
-                width: 55%;
-            }
-            .tab.create form  {
-                padding: 20px;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
-                border-radius: 10px;
-            }
-            .tab.create field {
-                display: block;
-            }
-            .tabs form label {
-                display: inline-block;
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
-                border-radius: 10px;
-                padding: 0.6rem;
-                margin: 0.2rem 0rem;
-                color: rgb(255, 255, 255);
-                background-color: rgb(60, 60, 60);
-            }
-            .tabs form input[type=submit] {
-                float: right;
-            }
-            .tabs form input[type=submit]:hover {
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
-            }
-            .tabs form input[type=submit]:focus {
                 background-color: rgb(30, 30, 30);
-            }
-            .tabs form input[type="radio"]:checked + label {
-                background-color: rgb(40, 40, 40);
-            }
-            .tabs form input[type="radio"]:hover + label {
-                opacity: 0.8;
-            }
-            .tabs form input[type="radio"]:focus + label {
-                background-color: #2e2e2e;
-            }
-            .tabs input[type="radio"]:checked + label {
-                background-color: rgb(70, 70, 70);
-            }
-            .tabs input[type="radio"]:checked + label + .tab {
-                display: inline-block;
             }
             .tabs .tab {
                 order: 9;
@@ -129,8 +120,66 @@
                 display: none;
                 padding: 1rem;
                 background-color: rgb(70, 70, 70);
-                box-shadow: -10px 10px 0px 0px black;  
+                /* box-shadow: -10px 10px 0px 0px rgb(30, 30, 30);   */
             }
+            .tabs input[type=checkbox] {
+                accent-color: blue;
+            }
+            .tabs-radio {
+                display: none; 
+            }
+            .tabs input[type="radio"]:checked + label {
+                background-color: rgb(70, 70, 70);
+            }
+            .tabs input[type="radio"]:checked + label + .tab {
+                display: inline-block;
+            }
+            .tab form button {
+                float: right;
+            }
+            .tab form button:hover {
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+            }
+            .tab form button:focus {
+                background-color: rgb(30, 30, 30);
+            }
+            /* CREATE */
+            .tab.create label  {
+                display: inline-block;
+                text-align: right;
+                width: 28%;
+                border: none;
+                background-color: rgb(70, 70, 70);
+            }
+            .tab.create input[type=text]  {
+                width: 55%;
+            }
+            .tab form {
+                padding: 20px;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+            }
+            /* VISITOR */
+            .tab.visitor label  {
+                display: inline-block;
+                text-align: right;
+                width: 28%;
+                border: none;
+                background-color: rgb(70, 70, 70);
+            }
+            .tab.visitor input[type=text]  {
+                width: 55%;
+            }
+            .tab form {
+                padding: 20px;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+            }
+            
+
+            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
+            /* ~~~~~~~~~~~ TABLES */
             table {
                 margin: 15px;
             }

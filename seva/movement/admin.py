@@ -4,8 +4,8 @@ from .models import Movement
 
 
 class MovementAdmin(admin.ModelAdmin):
-    list_display = ["user", "date", "in_time", "out_time", "vehicle", "note"]
-    search_fields = ["user.badge"]
+    list_display = ["person", "date", "in_time", "out_time", "vehicle", "note"]
+    search_fields = ["person.badge"]
     ordering = ["date"]
 
 

@@ -3,22 +3,24 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 
-from users.models import User
-from users.admin import NormUserCreationForm
+from persons.models import Person
+from movement.models import Movement
 from departments.models import Department
 from centres.models import Centre
 from vehicles.models import Vehicle
+
+from persons.admin import StaffCreationForm, VisitorCreationForm, GuestCreationForm
 from vehicles.admin import VehicleCreationForm
 
-from movement.models import Movement
 
 @login_required
 def home(request):
-    users = []
+    persons = []
     vehicles = []
     mov_in = []
     mov_all = []
-    results = ""
+    results = "Welcome to Seva"
+    results_code = 1
 
     all_centres = [ x[0] for x in Centre.objects.all().values_list("code") ]
     all_departments = [ x[0] for x in Department.objects.all().values_list("name")]
@@ -27,82 +29,169 @@ def home(request):
     if request.method == "GET":
         if "query" in request.GET:
             query = request.GET.get("query")
+            centre = Centre.objects.get(code=request.GET.get("centre-search"))
+            if query.strip() != "":
+                vehicles = Vehicle.objects.filter(vehicle_no=query.upper())
+                if len(vehicles) > 0:
+                    for vehicle in vehicles:
+                        persons.append(vehicle.person)
+                else:
+                    persons = Person.objects.filter(badge=query.lower(), centre=centre)
+                    for person in persons:
+                        vehicles = Vehicle.objects.filter(person=person)
+                if len(persons) == 0:
+                    results = "{0} not found".format(query)
+                    results_code = 0
+        
+    if request.method == "POST":
+        if request.POST.get("action") == "clock-in":
+                p = request.POST.get("person")
+                v = request.POST.get("vehicle")
 
-            vehicles = Vehicle.objects.filter(vehicle_no=query.upper())
-            if len(vehicles) > 0:
-                for vehicle in vehicles:
-                    users.append(vehicle.user)
+                if p != None and v != None:
+                    po = Person.objects.get(centre_badge=request.POST.get("person"))
+                    vo = Vehicle.objects.get(vehicle_no=request.POST.get("vehicle"))
+                    if len(Movement.objects.filter(person=po, vehicle=vo, out_time=None)) == 0:
+                        mov = Movement(person=po, vehicle=vo)
+                        mov.save()
+                        results = "{0} with {1} clocked in".format(po.badge, vo.vehicle_no)
+                        results_code = 1
+                    else:
+                        results = "{0} with {1} already clocked in".format(po.badge, vo.vehicle_no)
+                        results_code = 0
+                elif p != None:
+                    po = Person.objects.get(centre_badge=request.POST.get("person"))
+                    if len(Movement.objects.filter(person=po, out_time=None)) == 0:
+                        mov = Movement(person=po)
+                        mov.save()
+                        results = "{0} clocked in".format(po.badge)
+                        results_code = 1
+                    else:
+                        results = "{0} already clocked in".format(po.badge)
+                        results_code = 0
+                elif v != None:
+                    vo = Vehicle.objects.get(vehicle_no=request.POST.get("vehicle"))
+                    if len(Movement.objects.filter(vehicle=vo, out_time=None)) == 0:
+                        mov = Movement(vehicle=vo)
+                        mov.save()
+                        results = "{0} clocked in".format(vo.vehicle_no)
+                        results_code = 1
+                    else:
+                        results = "{0} already clocked in".format(vo.vehicle_no)
+                        results_code = 0
+
+
+        if request.POST.get("action") == "clock-out":
+            Movement.objects.filter(id=request.POST.get("clock-out")).update(out_time=timezone.now())
+            results = "{0} clocked out".format(Movement.objects.get(id=request.POST.get("clock-out")).person.badge)
+            results_code = 1
+
+        if request.POST.get("action") == "create-staff":
+            staff_create_form = StaffCreationForm(request.POST)    
+            if staff_create_form.is_valid():
+                po = staff_create_form.save(commit=False)
+                po.type = "S"
+                po.save()
+                results = "{0} successfully created".format(po.badge)
+                results_code = 1
+                if request.POST.get("clock-in") is not None:
+                    mov = Movement(person=po)
+                    mov.save()
+                    results = "{0} successfully created and clocked".format(po.badge)
+                    results_code = 1
             else:
-                users = User.objects.filter(badge=query.lower())
-                for user in users:
-                    vehicles = Vehicle.objects.filter(user=user)
-            if len(users) == 0:
-                results = "-- User not found! --"
+                results = "Staff creation Failed"
+                results_code = 0
 
-            if request.GET.get("clock") is not None:
-                clock = int(request.GET.get("clock"))
-                if len(users) > 0:
-                    mov = Movement.objects.filter(user=users[0], out_time=None)
-                    
-                    if len(mov) == 1 and clock == 0:
-                        Movement.objects.filter(user=users[0], out_time=None).update(out_time=timezone.now())
-                    elif len(mov) == 0 and clock == 1:
-                        if len(users) > 0 and len(vehicles) > 0:
-                            mov = Movement(user=users[0], vehicle=vehicles[0])
-                            mov.save()
-                        elif len(users) > 0:
-                            mov = Movement(user=users[0])
-                            mov.save()
-                        elif len(vehicles) > 0:
-                            mov = Movement(vehicle=vehicles[0])
-                            mov.save()
+        if request.POST.get("action") == "create-visitor":
+            visitor_create_form = VisitorCreationForm(request.POST)    
+            if visitor_create_form.is_valid():
+                po = visitor_create_form.save(commit=False)
+                po.type = "V"
+                po.save()
+                results = "{0} successfully created".format(po.badge)
+                results_code = 1
+                if request.POST.get("clock-in") is not None:
+                    mov = Movement(person=po)
+                    mov.save()
+                    results = "{0} successfully created and clocked".format(po.badge)
+                    results_code = 1
+            else:
+                results = "Visitor creation Failed"
+                results_code = 0
+            
+        if request.POST.get("action") == "create-guest":
+            guest_create_form = GuestCreationForm(request.POST)    
+            if guest_create_form.is_valid():
+                po = guest_create_form.save(commit=False)
+                po.type = "G"
+                po.save()
+                results = "{0} successfully created".format(po.badge)
+                results_code = 1
+                if request.POST.get("clock-in") is not None:
+                    mov = Movement(person=po)
+                    mov.save()
+                    results = "{0} successfully created and clocked".format(po.badge)
+                    results_code = 1
+            else:
+                results = "Guest creation Failed"
+                results_code = 0
+
+        if request.POST.get("action") == "create-vehicle":
+            vh_create_form = VehicleCreationForm(request.POST)
+            if vh_create_form.is_valid():
+                vo = vh_create_form.save(commit=False)
+                po = Person.objects.get(badge=request.POST.get("badge"),
+                                        centre=Centre.objects.get(code=request.POST.get("centre")))
+                if po:
+                    vo.person = po
+                    vo.save()
+                    results = "{0} successfully created".format(vo.vehicle_no)
+                    results_code = 1
+                    if request.POST.get("clock-in") is not None:
+                        mov = Movement(vehicle=vo, person=po)
+                        mov.save()
+                        results = "{0} successfully created and clocked".format(vo.vehicle_no)
+                        results_code = 1
+            else:
+                results = "Vehicle creation Failed"
+                results_code = 0
 
     mov_in = Movement.objects.filter(out_time=None)
     mov_all = Movement.objects.filter(date=timezone.now())
-        
-    if request.method == "POST":
-        user_create_form = NormUserCreationForm(request.POST)
-        vh_create_form = VehicleCreationForm(request.POST)
-        
-        if user_create_form.is_valid():
-            user_create_form.save()
-            results = " -- User successfully created! --"
-        else:
-            results = " -- User creation Failed! -- "
-        
-        if vh_create_form.is_valid():
-            vh_create_form.save()
-            results = " -- Vehcile successfully created! --"
-        else:
-            results = " -- Vehcile creation Failed! -- "
 
-    context = {"users": users,
-                "vehicles": vehicles,
-                "departments": all_departments,
-                "centres": all_centres,
-                "movement_in": mov_in,
-                "movement_all": mov_all,
-                "date": datetime,
-                "results": results,
-                "user_form": NormUserCreationForm,
-                "vh_form": VehicleCreationForm}
+    context = {"persons": persons,
+               "vehicles": vehicles,
+               "departments": all_departments,
+               "centres": all_centres,
+               "movement_in": mov_in,
+               "movement_all": mov_all,
+               "date": datetime,
+               "results": results,
+               "results_code": results_code,
+               "staff_form": StaffCreationForm,
+               "visitor_form": VisitorCreationForm,
+               "guest_form": GuestCreationForm,
+               "vh_form": VehicleCreationForm}
 
     return render(request, "home.html", context=context)
+
 
 def login_user(request):
     if request.user.is_authenticated:
         return redirect('/')
 
     if request.method == "POST":
-        badge = request.POST.get("badge")
+        username = request.POST.get("username")
         password = request.POST.get("password")
-        user = authenticate(request, badge=badge, password=password)
+        user = authenticate(request, username=username, password=password)
         if user is None:
-            context = {"error": "Invalid badge or password"}
+            context = {"error": "Invalid username or password"}
             return render(request, "login.html", context=context)
         login(request, user)
         return redirect('/')
     return render(request, "login.html")
+
 
 def logout_user(request):
     if request.method == "POST":
