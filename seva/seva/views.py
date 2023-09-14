@@ -11,6 +11,7 @@ from vehicles.models import Vehicle
 
 from persons.admin import StaffCreationForm, VisitorCreationForm, GuestCreationForm
 from vehicles.admin import VehicleCreationForm
+from movement.admin import MovementFilterForm
 
 
 @login_required
@@ -156,9 +157,9 @@ def home(request):
             else:
                 results = "Vehicle creation Failed"
                 results_code = 0
-
+    
     mov_in = Movement.objects.filter(out_time=None)
-    mov_all = Movement.objects.filter(date=timezone.now())
+    mov_all = Movement.objects.filter(date=timezone.now()).exclude(out_time=None)
 
     context = {"persons": persons,
                "vehicles": vehicles,
@@ -172,7 +173,8 @@ def home(request):
                "staff_form": StaffCreationForm,
                "visitor_form": VisitorCreationForm,
                "guest_form": GuestCreationForm,
-               "vh_form": VehicleCreationForm}
+               "vh_form": VehicleCreationForm,
+               "mov_filter_form": MovementFilterForm}
 
     return render(request, "home.html", context=context)
 

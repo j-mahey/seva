@@ -112,6 +112,10 @@
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-staff">
             <div>
+                <label>Centre : </label>
+                {{ staff_form.centre }}
+            </div>
+            <div>
                 <label>Badge : </label>
                 {{ staff_form.badge }}
             </div>
@@ -126,10 +130,6 @@
             <div>
                 <label>Gender : </label>
                 {{ staff_form.gender }}
-            </div>
-            <div>
-                <label>Centre : </label>
-                {{ staff_form.centre }}
             </div>
             <div>
                 <label>Department : </label>
@@ -149,6 +149,10 @@
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-visitor">
             <div>
+                <label>Centre : </label>
+                {{ visitor_form.centre }}
+            </div>
+            <div>
                 <label>Full Name : </label>
                 {{ visitor_form.full_name }}
             </div>
@@ -159,10 +163,6 @@
             <div>
                 <label>Gender : </label>
                 {{ visitor_form.gender }}
-            </div>
-            <div>
-                <label>Centre : </label>
-                {{ visitor_form.centre }}
             </div>
             <div>
                 <label>Department : </label>
@@ -182,6 +182,10 @@
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-guest">
             <div>
+                <label>Centre : </label>
+                {{ guest_form.centre }}
+            </div>
+            <div>
                 <label>Full Name : </label>
                 {{ guest_form.full_name }}
             </div>
@@ -192,10 +196,6 @@
             <div>
                 <label>Gender : </label>
                 {{ guest_form.gender }}
-            </div>
-            <div>
-                <label>Centre : </label>
-                {{ guest_form.centre }}
             </div>
             <div>
                 <label>Department : </label>
@@ -215,6 +215,14 @@
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-vehicle">
             <div>
+                <label>Centre : </label>
+                {{ vh_form.centre }}
+            </div>
+            <div>
+                <label>Badge : </label>
+                {{ vh_form.badge }}
+            </div>
+            <div>
                 <label>Type : </label>
                 {{ vh_form.type }}
             </div>
@@ -225,14 +233,6 @@
             <div>
                 <label>Custom Id : </label>
                 {{ vh_form.custom_id }}
-            </div>
-            <div>
-                <label>Centre : </label>
-                {{ vh_form.centre }}
-            </div>
-            <div>
-                <label>Badge : </label>
-                {{ vh_form.badge }}
             </div>
             <div>
                 <label for="clock-in">Clock In : </label>
@@ -257,11 +257,15 @@
             <table>
                 <thead>
                 <tr>
-                    <th colspan="5">CLOCKED IN : {{movement_in|length}}</th>
+                    <th colspan="9">CLOCKED IN : {{movement_in|length}}</th>
                 </tr>
                 <tr>
+                    <th></th>
+                    <th>Centre</th>
                     <th>Badge</th>
                     <th>Type</th>
+                    <th>Full Name</th>
+                    <th>Contact</th>
                     <th>Vehicle No</th>
                     <th>Vehicle Type</th>
                     <th>In Time</th>
@@ -272,9 +276,13 @@
                 <tr>
                     <td>
                         <input type="radio" id={{mov.person.badge}} name="clock-out" value={{mov.id}}>
-                        <label for={{mov.person.badge}}>{{ mov.person.badge }}</label>
+                        <label for={{mov.person.badge}}></label>
                     </td>
+                    <td>{{ mov.person.centre }}</td>
+                    <td>{{ mov.person.badge }}</td>
                     <td>{{ mov.person.get_type_display }}</td>
+                    <td>{{ mov.person.full_name }}</td>
+                    <td>{{ mov.person.contact_number }}</td>
                     <td>{{ mov.vehicle.vehicle_no }}</td>
                     <td>{{ mov.vehicle.get_type_display }}</td>
                     <td>{{ mov.in_time }}</td>
@@ -284,6 +292,8 @@
             </table>
             <button type="submit">Clock Out</button>
         </form>
+        {% else %}
+        <p>No one currently clocked in.</p>
         {% endif %}
     </div>
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -295,12 +305,14 @@
         <table>
             <thead>
             <tr>
-                <th colspan="8">TODAY ATTENDENCE : {{movement_all|length}}</th>
+                <th colspan="10">TODAY ATTENDENCE : {{movement_all|length}}</th>
             </tr>
             <tr>
                 <th>Centre</th>
                 <th>Badge</th>
                 <th>Type</th>
+                <th>Full Name</th>
+                <th>Contact</th>
                 <th>Vehicle No</th>
                 <th>Vehicle Type</th>
                 <th>Date</th>
@@ -314,6 +326,8 @@
                 <td>{{ mov.person.centre }}</td>
                 <td>{{ mov.person.badge }}</td>
                 <td>{{ mov.person.get_type_display }}</td>
+                <td>{{ mov.person.full_name }}</td>
+                <td>{{ mov.person.contact_number }}</td>
                 <td>{{ mov.vehicle.vehicle_no }}</td>
                 <td>{{ mov.vehicle.get_type_display }}</td>
                 <td>{{ mov.date }}</td>
@@ -323,6 +337,53 @@
             {% endfor %}
         </tbody>
         </table>
+        {% else %}
+        <p>No attendence for today yet.</p>
+        {% endif %}
+    </div>
+    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- ~~~~~~~~~~~~~ REPORT -->
+    <input class="tabs-select tabs-radio" type="radio" name="set2" id="report">
+    <label class="tabs-select" for="report"><b>REPORT</b></label>
+    <div class="tab report">
+        {% if movement_report|length > 0 %}
+        <table>
+            <thead>
+            <tr>
+                <th colspan="10">RECORDS : {{movement_report|length}}</th>
+            </tr>
+            <tr>
+                <th>Centre</th>
+                <th>Badge</th>
+                <th>Type</th>
+                <th>Full Name</th>
+                <th>Contact</th>
+                <th>Vehicle No</th>
+                <th>Vehicle Type</th>
+                <th>Date</th>
+                <th>In Time</th>
+                <th>Out Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for mov in movement_report %}
+            <tr>
+                <td>{{ mov.person.centre }}</td>
+                <td>{{ mov.person.badge }}</td>
+                <td>{{ mov.person.get_type_display }}</td>
+                <td>{{ mov.person.full_name }}</td>
+                <td>{{ mov.person.contact_number }}</td>
+                <td>{{ mov.vehicle.vehicle_no }}</td>
+                <td>{{ mov.vehicle.get_type_display }}</td>
+                <td>{{ mov.date }}</td>
+                <td>{{ mov.in_time }}</td>
+                <td>{{ mov.out_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+        {% else %}
+        <p>No records found.</p>
         {% endif %}
     </div>
 </div>

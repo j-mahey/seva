@@ -19,7 +19,7 @@
                 margin: 0.2rem;
             }
             form {
-                width: 700px
+                max-width: 1000px
             }
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -45,6 +45,7 @@
                 top: 0;
                 left: 0;
                 width: 100%;
+                min-width: 1050px;
                 background-color: rgb(30, 30, 30);
             }
             .logout p {
@@ -76,11 +77,12 @@
             /* ~~~~~~~~~~~ SEARCH */
             .search {
                 margin-top: 80px;
-                padding: 20px;
+                padding: 10px 15px;
                 background-color: rgb(70, 70, 70);
+                min-width: 1050px;
             }
             .search input[type=text] {
-                width: 84%;
+                width: 500px;
             }
             .search button:hover {
                 border: solid rgb(100, 100, 100);
@@ -117,10 +119,10 @@
                 order: 9;
                 flex-grow: 1;
                 width: 100%;
+                min-width: 1050px;
                 display: none;
                 padding: 1rem;
                 background-color: rgb(70, 70, 70);
-                /* box-shadow: -10px 10px 0px 0px rgb(30, 30, 30);   */
             }
             .tabs input[type=checkbox] {
                 accent-color: blue;
@@ -144,6 +146,7 @@
             .tab form button:focus {
                 background-color: rgb(30, 30, 30);
             }
+
             /* CREATE */
             .tab.create label  {
                 display: inline-block;
@@ -160,23 +163,6 @@
                 border: solid rgb(50, 50, 50);
                 border-width: 2px;
             }
-            /* VISITOR */
-            .tab.visitor label  {
-                display: inline-block;
-                text-align: right;
-                width: 28%;
-                border: none;
-                background-color: rgb(70, 70, 70);
-            }
-            .tab.visitor input[type=text]  {
-                width: 55%;
-            }
-            .tab form {
-                padding: 20px;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
-            }
-            
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
             /* ~~~~~~~~~~~ TABLES */

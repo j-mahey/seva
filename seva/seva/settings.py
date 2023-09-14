@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'vehicles',
     'departments',
     'centres',
-    'movement'
+    'movement',
 ]
 
 MIDDLEWARE = [
