@@ -346,45 +346,26 @@
     <input class="tabs-select tabs-radio" type="radio" name="set2" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
-        {% if movement_report|length > 0 %}
         <table>
             <thead>
-            <tr>
-                <th colspan="10">RECORDS : {{movement_report|length}}</th>
-            </tr>
-            <tr>
-                <th>Centre</th>
-                <th>Badge</th>
-                <th>Type</th>
-                <th>Full Name</th>
-                <th>Contact</th>
-                <th>Vehicle No</th>
-                <th>Vehicle Type</th>
-                <th>Date</th>
-                <th>In Time</th>
-                <th>Out Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for mov in movement_report %}
-            <tr>
-                <td>{{ mov.person.centre }}</td>
-                <td>{{ mov.person.badge }}</td>
-                <td>{{ mov.person.get_type_display }}</td>
-                <td>{{ mov.person.full_name }}</td>
-                <td>{{ mov.person.contact_number }}</td>
-                <td>{{ mov.vehicle.vehicle_no }}</td>
-                <td>{{ mov.vehicle.get_type_display }}</td>
-                <td>{{ mov.date }}</td>
-                <td>{{ mov.in_time }}</td>
-                <td>{{ mov.out_time }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
+                <tr>
+                    <th>DEPARTMENT</th>
+                    <th>MALE : {{dept_summary.total.male}}</th>
+                    <th>FEMALE : {{dept_summary.total.female}}</th>
+                    <th>TOTAL : {{dept_summary.total.total}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dept in dept_summary.depts %}
+                <tr>
+                    <td>{{ dept.department }}</td>
+                    <td>{{ dept.male }}</td>
+                    <td>{{ dept.female }}</td>
+                    <td>{{ dept.total }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
         </table>
-        {% else %}
-        <p>No records found.</p>
-        {% endif %}
     </div>
 </div>
 

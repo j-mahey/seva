@@ -161,6 +161,24 @@ def home(request):
     mov_in = Movement.objects.filter(out_time=None)
     mov_all = Movement.objects.filter(date=timezone.now()).exclude(out_time=None)
 
+    all_male = 0
+    all_female = 0
+    dept_summary = {"depts": [], "total": {}}
+    for x in all_departments:
+        dept = x
+        male = len(Movement.objects.filter(date=timezone.now(), person__department__name = x, person__gender="M"))
+        female = len(Movement.objects.filter(date=timezone.now(), person__department__name = x, person__gender="F"))
+        dept_summary["depts"].append({"department": dept,
+                             "male": male,
+                             "female": female,
+                             "total": male + female})
+        all_male += male
+        all_female += female
+
+    dept_summary["total"]["male"] = all_male
+    dept_summary["total"]["female"] = all_female
+    dept_summary["total"]["total"] = all_male + all_female
+
     context = {"persons": persons,
                "vehicles": vehicles,
                "departments": all_departments,
@@ -174,7 +192,8 @@ def home(request):
                "visitor_form": VisitorCreationForm,
                "guest_form": GuestCreationForm,
                "vh_form": VehicleCreationForm,
-               "mov_filter_form": MovementFilterForm}
+               "mov_filter_form": MovementFilterForm,
+               "dept_summary": dept_summary}
 
     return render(request, "home.html", context=context)
 
