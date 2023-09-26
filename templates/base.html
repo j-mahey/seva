@@ -74,36 +74,9 @@
             }
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
-            /* ~~~~~~~~~~~ SEARCH */
-            .search {
-                margin-top: 80px;
-                padding: 10px 15px;
-                background-color: rgb(70, 70, 70);
-                min-width: 1050px;
-            }
-            .search input[type=text] {
-                width: 500px;
-            }
-            .search button:hover {
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
-            }
-            .search button:focus {
-                background-color: rgb(30, 30, 30);
-            }
-            .clock-form {
-                margin: 20px 0px;
-                padding: 20px;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
-            }
-            .clock-form button {
-                float: right;
-            }
-
-            /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
             /* ~~~~~~~~~~~ TABS */
             .tabs {
+                margin-top: 80px;
                 display: flex;
                 flex-wrap: wrap;
             }
@@ -136,6 +109,11 @@
             .tabs input[type="radio"]:checked + label + .tab {
                 display: inline-block;
             }
+            .tab form {
+                padding: 20px;
+                border: solid rgb(50, 50, 50);
+                border-width: 2px;
+            }
             .tab form button {
                 float: right;
             }
@@ -146,22 +124,37 @@
             .tab form button:focus {
                 background-color: rgb(30, 30, 30);
             }
+            
+            /* ~~~~~~~~~~~ CLOCK */
+            .clock {
+                padding: 10px 15px;
+                background-color: rgb(70, 70, 70);
+                min-width: 1050px;
+            }
+            .clock button:hover {
+                border: solid rgb(100, 100, 100);
+                border-width: 2px;
+            }
+            .clock button:focus {
+                background-color: rgb(30, 30, 30);
+            }
+            .clock .clock-search {
+                border: none;
+            }
+            .clock-search input[type=text] {
+                width: 810px;
+            }
 
-            /* CREATE */
-            .tab.create label  {
+            /* ~~~~~~~~~~~ ENTRY */
+            .tab.entry label  {
                 display: inline-block;
                 text-align: right;
                 width: 28%;
                 border: none;
                 background-color: rgb(70, 70, 70);
             }
-            .tab.create input[type=text]  {
+            .tab.entry input[type=text]  {
                 width: 55%;
-            }
-            .tab form {
-                padding: 20px;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
             }
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */

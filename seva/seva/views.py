@@ -9,7 +9,7 @@ from departments.models import Department
 from centres.models import Centre
 from vehicles.models import Vehicle
 
-from persons.admin import StaffCreationForm, VisitorCreationForm, GuestCreationForm
+from persons.admin import PersonCreationForm
 from vehicles.admin import VehicleCreationForm
 from movement.admin import MovementFilterForm
 
@@ -39,7 +39,7 @@ def home(request):
                 else:
                     persons = Person.objects.filter(badge=query.lower(), centre=centre)
                     for person in persons:
-                        vehicles = Vehicle.objects.filter(person=person)
+                            vehicles = Vehicle.objects.filter(person=person)
                 if len(persons) == 0:
                     results = "{0} not found".format(query)
                     results_code = 0
@@ -87,12 +87,10 @@ def home(request):
             results = "{0} clocked out".format(Movement.objects.get(id=request.POST.get("clock-out")).person.badge)
             results_code = 1
 
-        if request.POST.get("action") == "create-staff":
-            staff_create_form = StaffCreationForm(request.POST)    
-            if staff_create_form.is_valid():
-                po = staff_create_form.save(commit=False)
-                po.type = "S"
-                po.save()
+        if request.POST.get("action") == "create-person":
+            person_create_form = PersonCreationForm(request.POST)    
+            if person_create_form.is_valid():
+                po = person_create_form.save()
                 results = "{0} successfully created".format(po.badge)
                 results_code = 1
                 if request.POST.get("clock-in") is not None:
@@ -101,41 +99,7 @@ def home(request):
                     results = "{0} successfully created and clocked".format(po.badge)
                     results_code = 1
             else:
-                results = "Staff creation Failed"
-                results_code = 0
-
-        if request.POST.get("action") == "create-visitor":
-            visitor_create_form = VisitorCreationForm(request.POST)    
-            if visitor_create_form.is_valid():
-                po = visitor_create_form.save(commit=False)
-                po.type = "V"
-                po.save()
-                results = "{0} successfully created".format(po.badge)
-                results_code = 1
-                if request.POST.get("clock-in") is not None:
-                    mov = Movement(person=po)
-                    mov.save()
-                    results = "{0} successfully created and clocked".format(po.badge)
-                    results_code = 1
-            else:
-                results = "Visitor creation Failed"
-                results_code = 0
-            
-        if request.POST.get("action") == "create-guest":
-            guest_create_form = GuestCreationForm(request.POST)    
-            if guest_create_form.is_valid():
-                po = guest_create_form.save(commit=False)
-                po.type = "G"
-                po.save()
-                results = "{0} successfully created".format(po.badge)
-                results_code = 1
-                if request.POST.get("clock-in") is not None:
-                    mov = Movement(person=po)
-                    mov.save()
-                    results = "{0} successfully created and clocked".format(po.badge)
-                    results_code = 1
-            else:
-                results = "Guest creation Failed"
+                results = "Person creation Failed"
                 results_code = 0
 
         if request.POST.get("action") == "create-vehicle":
@@ -188,9 +152,7 @@ def home(request):
                "date": datetime,
                "results": results,
                "results_code": results_code,
-               "staff_form": StaffCreationForm,
-               "visitor_form": VisitorCreationForm,
-               "guest_form": GuestCreationForm,
+               "person_form": PersonCreationForm,
                "vh_form": VehicleCreationForm,
                "mov_filter_form": MovementFilterForm,
                "dept_summary": dept_summary}

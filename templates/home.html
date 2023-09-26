@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!-- ~~~~~~~~~~~~~ LOGOUT -->
 <div class="logout">
@@ -19,240 +18,88 @@
     </form>
 </div>
 
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!-- ~~~~~~~~~~~~~ SEARCH -->
-<div class="search">
-    <form class="search-form" method="GET">
-        <div>
-            <select name="centre-search" required>
-                {% for c in centres %}
-                <option value={{c}}>{{c}}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div>
-            <input type="text" placeholder="Enter Badge or Vehicle Number" name="query" />
-            <button type="submit">Search</button>
-        </div>
-    </form>
-
-    {% if persons|length > 0 %}
-    <form class="clock-form" action="" method="POST">{% csrf_token %}
-        <input type="hidden" name="action" value="clock-in">
-        {% if vehicles|length > 0 %}
-        <table>
-            <thead>
-            <tr>
-                <th colspan="4">VEHICLE INFO</th>
-            </tr>
-            <tr>
-                <th>Vehicle No</th>
-                <th>Custom Id</th>
-                <th>Person</th>
-                <th>Type</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for vehicle in vehicles %}
-            <tr>
-                <td>
-                    <input type="radio" id={{vehicle.vehicle_no}} name="vehicle" value={{vehicle.vehicle_no}}>
-                    <label for={{vehicle.vehicle_no}}>{{ vehicle.vehicle_no }}</label>
-                </td>
-                <td>{{ vehicle.custom_id }}</td>
-                <td>{{ vehicle.person.badge }}</td>
-                <td>{{ vehicle.get_type_display }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        </table>
-        {% endif %}
-        <table>
-            <thead>
-            <tr>
-                <th colspan="6">PERSON INFO</th>
-            </tr>
-            <tr>
-                <th>Badge</th>
-                <th>Full Name</th>
-                <th>Department</th>
-                <th>Gender</th>
-                <th>Contact Number</th>
-            </tr>
+<div class="tabs">
+    <!-- ~~~~~~~~~~~~~ CLOCK -->
+    <input class="tabs-select tabs-radio" type="radio" name="set" id="clock" checked="checked">
+    <label class="tabs-select" for="clock"><b>CLOCK</b></label>
+    <div class="tab clock">
+        <form class="clock-search" method="GET">
+            <input type="hidden" name="action" value="clock-search">
+            <div>
+                <select name="centre-search" required>
+                    {% for c in centres %}
+                    <option value={{c}}>{{c}}</option>
+                    {% endfor %}
+                </select>
+                <input type="text" placeholder="Enter Badge or Vehicle Number" name="query" />
+                <button type="submit">Search</button>
+            </div>
+        </form>
+        {% if persons|length > 0 %}
+        <form class="clock-in" action="" method="POST">{% csrf_token %}
+            <input type="hidden" name="action" value="clock-in">
+            {% if vehicles|length > 0 %}
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="4">VEHICLE INFO</th>
+                </tr>
+                <tr>
+                    <th>Vehicle No</th>
+                    <th>Custom Id</th>
+                    <th>Person</th>
+                    <th>Type</th>
+                </tr>
             </thead>
             <tbody>
-            {% for person in persons %}
-            <tr>
-                <td>
-                    <input type="radio" id={{person.badge}} name="person" value={{person.centre_badge}} required>
-                    <label for={{person.badge}}>{{ person.badge }}</label>
-                </td>
-                <td>{{ person.full_name }}</td>
-                <td>{{ person.department }}</td>
-                <td>{{ person.get_gender_display }}</td>
-                <td>{{ person.contact_number }}</td>
-            </tr>
-            {% endfor %}
+                {% for vehicle in vehicles %}
+                <tr>
+                    <td>
+                        <input type="radio" id={{vehicle.vehicle_no}} name="vehicle" value={{vehicle.vehicle_no}}>
+                        <label for={{vehicle.vehicle_no}}>{{ vehicle.vehicle_no }}</label>
+                    </td>
+                    <td>{{ vehicle.custom_id }}</td>
+                    <td>{{ vehicle.person.badge }}</td>
+                    <td>{{ vehicle.get_type_display }}</td>
+                </tr>
+                {% endfor %}
             </tbody>
-        </table>
-        <button type="submit">Clock In</button>
-    </form>
-    {% endif %}
-</div>
-
-<div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!-- ~~~~~~~~~~~~~ CREATE -->
-<div class="tabs">
-    <!-- ~~~~~~~~~~~~~ STAFF -->
-    <input class="tabs-select tabs-radio" type="radio" name="set1" id="create-staff" checked="checked">
-    <label class="tabs-select" for="create-staff"><b>STAFF</b></label>
-    <div class="tab create">
-        <form action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="create-staff">
-            <div>
-                <label>Centre : </label>
-                {{ staff_form.centre }}
-            </div>
-            <div>
-                <label>Badge : </label>
-                {{ staff_form.badge }}
-            </div>
-            <div>
-                <label>Full Name : </label>
-                {{ staff_form.full_name }}
-            </div>
-            <div>
-                <label>Contact Number : </label>
-                {{ staff_form.contact_number }}
-            </div>
-            <div>
-                <label>Gender : </label>
-                {{ staff_form.gender }}
-            </div>
-            <div>
-                <label>Department : </label>
-                {{ staff_form.department }}
-            </div>
-            <div>
-                <label for="clock-in">Clock In :  </label>
-                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
-            </div>
-            <button type="submit">Create Staff</button>
+            </table>
+            {% endif %}
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="6">PERSON INFO</th>
+                </tr>
+                <tr>
+                    <th>Badge</th>
+                    <th>Full Name</th>
+                    <th>Department</th>
+                    <th>Gender</th>
+                    <th>Contact Number</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for person in persons %}
+                <tr>
+                    <td>
+                        <input type="radio" id={{person.badge}} name="person" value={{person.centre_badge}} required>
+                        <label for={{person.badge}}>{{ person.badge }}</label>
+                    </td>
+                    <td>{{ person.full_name }}</td>
+                    <td>{{ person.department }}</td>
+                    <td>{{ person.get_gender_display }}</td>
+                    <td>{{ person.contact_number }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit">Clock In</button>
         </form>
-    </div>
-    <!-- ~~~~~~~~~~~~~ VISITOR -->
-    <input class="tabs-select tabs-radio" type="radio" name="set1" id="create-visitor">
-    <label class="tabs-select" for="create-visitor"><b>VISITOR</b></label>
-    <div class="tab create">
-        <form action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="create-visitor">
-            <div>
-                <label>Centre : </label>
-                {{ visitor_form.centre }}
-            </div>
-            <div>
-                <label>Full Name : </label>
-                {{ visitor_form.full_name }}
-            </div>
-            <div>
-                <label>Contact Number : </label>
-                {{ visitor_form.contact_number }}
-            </div>
-            <div>
-                <label>Gender : </label>
-                {{ visitor_form.gender }}
-            </div>
-            <div>
-                <label>Department : </label>
-                {{ visitor_form.department }}
-            </div>
-            <div>
-                <label for="clock-in">Clock In :  </label>
-                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
-            </div>
-            <button type="submit">Create Visitor</button>
-        </form>
-    </div>
-    <!-- ~~~~~~~~~~~~~ GUEST -->
-    <input class="tabs-select tabs-radio" type="radio" name="set1" id="create-guest">
-    <label class="tabs-select" for="create-guest"><b>GUEST</b></label>
-    <div class="tab create">
-        <form action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="create-guest">
-            <div>
-                <label>Centre : </label>
-                {{ guest_form.centre }}
-            </div>
-            <div>
-                <label>Full Name : </label>
-                {{ guest_form.full_name }}
-            </div>
-            <div>
-                <label>Contact Number : </label>
-                {{ guest_form.contact_number }}
-            </div>
-            <div>
-                <label>Gender : </label>
-                {{ guest_form.gender }}
-            </div>
-            <div>
-                <label>Department : </label>
-                {{ guest_form.department }}
-            </div>
-            <div>
-                <label for="clock-in">Clock In :  </label>
-                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
-            </div>
-            <button type="submit">Create Guest</button>
-        </form>
-    </div>
-    <!-- ~~~~~~~~~~~~~ VEHICLE -->
-    <input class="tabs-select tabs-radio" type="radio" name="set1" id="create-vehicle">
-    <label class="tabs-select" for="create-vehicle"><b>VEHICLE</b></label>
-    <div class="tab create">
-        <form action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="create-vehicle">
-            <div>
-                <label>Centre : </label>
-                {{ vh_form.centre }}
-            </div>
-            <div>
-                <label>Badge : </label>
-                {{ vh_form.badge }}
-            </div>
-            <div>
-                <label>Type : </label>
-                {{ vh_form.type }}
-            </div>
-            <div>
-                <label>Vehicle No. : </label>
-                {{ vh_form.vehicle_no }}
-            </div>
-            <div>
-                <label>Custom Id : </label>
-                {{ vh_form.custom_id }}
-            </div>
-            <div>
-                <label for="clock-in">Clock In : </label>
-                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
-            </div>
-            <button type="submit">Create Vehicle</button>
-        </form>
-    </div>
-</div>
-
-<div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-
-<div class="tabs">
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <!-- ~~~~~~~~~~~~~ CURRENT -->
-    <input class="tabs-select tabs-radio" type="radio" name="set2" id="current" checked="checked">
-    <label class="tabs-select" for="current"><b>CLOCKED</b></label>
-    <div class="tab current">
+        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
+        {% endif %}
         {% if movement_in|length > 0 %}
-        <form action="" method="POST">{% csrf_token %}
+        <form class="clock-out" action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="clock-out">
             <table>
                 <thead>
@@ -296,11 +143,82 @@
         <p>No one currently clocked in.</p>
         {% endif %}
     </div>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <!-- ~~~~~~~~~~~~~ TOTAL -->
-    <input class="tabs-select tabs-radio" type="radio" name="set2" id="total">
-    <label class="tabs-select" for="total"><b>ATTENDENCE</b></label>
-    <div class="tab total">
+
+    <!-- ~~~~~~~~~~~~~ ENTRY -->
+    <input class="tabs-select tabs-radio" type="radio" name="set" id="entry">
+    <label class="tabs-select" for="entry"><b>ENTRY</b></label>
+    <div class="tab entry">
+        <form action="" method="POST">{% csrf_token %}
+            <input type="hidden" name="action" value="create-person">
+            <div>
+                <label>Type : </label>
+                {{ person_form.type }}
+            </div>
+            <div>
+                <label>Centre : </label>
+                {{ person_form.centre }}
+            </div>
+            <div>
+                <label>Badge : </label>
+                {{ person_form.badge }}
+            </div>
+            <div>
+                <label>Full Name : </label>
+                {{ person_form.full_name }}
+            </div>
+            <div>
+                <label>Contact Number : </label>
+                {{ person_form.contact_number }}
+            </div>
+            <div>
+                <label>Gender : </label>
+                {{ person_form.gender }}
+            </div>
+            <div>
+                <label>Department : </label>
+                {{ person_form.department }}
+            </div>
+            <div>
+                <label for="clock-in">Clock In :  </label>
+                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
+            </div>
+            <button type="submit">Create Person</button>
+        </form>
+        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
+        <form action="" method="POST">{% csrf_token %}
+            <input type="hidden" name="action" value="create-vehicle">
+            <div>
+                <label>Centre : </label>
+                {{ vh_form.centre }}
+            </div>
+            <div>
+                <label>Badge : </label>
+                {{ vh_form.badge }}
+            </div>
+            <div>
+                <label>Type : </label>
+                {{ vh_form.type }}
+            </div>
+            <div>
+                <label>Vehicle No. : </label>
+                {{ vh_form.vehicle_no }}
+            </div>
+            <div>
+                <label>Custom Id : </label>
+                {{ vh_form.custom_id }}
+            </div>
+            <div>
+                <label for="clock-in">Clock In : </label>
+                <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
+            </div>
+            <button type="submit">Create Vehicle</button>
+        </form>
+    </div>
+
+    <!-- ~~~~~~~~~~~~~ REPORT -->
+    <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
+    <label class="tabs-select" for="report"><b>REPORT</b></label>
+    <div class="tab report">
         {% if movement_all|length > 0 %}
         <table>
             <thead>
@@ -340,33 +258,31 @@
         {% else %}
         <p>No attendence for today yet.</p>
         {% endif %}
-    </div>
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <!-- ~~~~~~~~~~~~~ REPORT -->
-    <input class="tabs-select tabs-radio" type="radio" name="set2" id="report">
-    <label class="tabs-select" for="report"><b>REPORT</b></label>
-    <div class="tab report">
         <table>
             <thead>
                 <tr>
-                    <th>DEPARTMENT</th>
-                    <th>MALE : {{dept_summary.total.male}}</th>
-                    <th>FEMALE : {{dept_summary.total.female}}</th>
+                    <th colspan="4">DEPARTMENT REPORT</th>
+                </tr>
+                <tr>
+                    <th>NAME</th>
+                    <th># MALE : {{dept_summary.total.male}}</th>
+                    <th># FEMALE : {{dept_summary.total.female}}</th>
                     <th>TOTAL : {{dept_summary.total.total}}</th>
                 </tr>
             </thead>
             <tbody>
                 {% for dept in dept_summary.depts %}
-                <tr>
-                    <td>{{ dept.department }}</td>
-                    <td>{{ dept.male }}</td>
-                    <td>{{ dept.female }}</td>
-                    <td>{{ dept.total }}</td>
-                </tr>
+                    {% if dept.total > 0%}
+                    <tr>
+                        <td>{{ dept.department }}</td>
+                        <td>{{ dept.male }}</td>
+                        <td>{{ dept.female }}</td>
+                        <td>{{ dept.total }}</td>
+                    </tr>
+                    {% endif %}
                 {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
-
 {% endblock content %}
