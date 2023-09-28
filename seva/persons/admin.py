@@ -6,9 +6,14 @@ from centres.models import Centre
 
 
 class PersonCreationForm(forms.ModelForm):
+
     class Meta:
         model = Person
         fields = ["type", "centre", "badge", "full_name", "gender", "contact_number", "department"]
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['badge'].required = False
 
 
 class PersonAdmin(admin.ModelAdmin):

@@ -12,7 +12,7 @@ class VehicleCreationForm(forms.ModelForm):
     badge = forms.CharField()
     class Meta:
         model = Vehicle
-        fields = ["vehicle_no", "custom_id", "type",]
+        fields = ["vehicle_no", "type",]
 
 
 class VehicleAdmin(admin.ModelAdmin):

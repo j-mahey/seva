@@ -174,6 +174,23 @@
                 background-color: rgb(60, 60, 60);
             }
         </style>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const type = document.querySelector('#id_type');
+                const badge = document.querySelector('#field_badge');
+                type.addEventListener('input', function () {
+                    if (type.value === "1" || type.value === "2") {
+                        badge.style.display = 'none';
+
+                    } else {
+                        badge.style.display = 'block';
+                    }
+                });
+
+                // Trigger the input event initially if needed
+                type.dispatchEvent(new Event('input'));
+            });
+        </script>
     </head>
     <body>
         {% block content %}

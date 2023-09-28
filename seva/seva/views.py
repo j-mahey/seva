@@ -104,6 +104,7 @@ def home(request):
 
         if request.POST.get("action") == "create-vehicle":
             vh_create_form = VehicleCreationForm(request.POST)
+            print('yay')
             if vh_create_form.is_valid():
                 vo = vh_create_form.save(commit=False)
                 po = Person.objects.get(badge=request.POST.get("badge"),
@@ -111,12 +112,12 @@ def home(request):
                 if po:
                     vo.person = po
                     vo.save()
-                    results = "{0} successfully created".format(vo.vehicle_no)
+                    results = "{0} ({1}) successfully created".format(vo.vehicle_no, vo.custom_id)
                     results_code = 1
                     if request.POST.get("clock-in") is not None:
                         mov = Movement(vehicle=vo, person=po)
                         mov.save()
-                        results = "{0} successfully created and clocked".format(vo.vehicle_no)
+                        results = "{0} ({1}) successfully created and clocked".format(vo.vehicle_no, vo.custom_id)
                         results_code = 1
             else:
                 results = "Vehicle creation Failed"

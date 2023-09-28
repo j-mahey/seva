@@ -2,6 +2,7 @@ from persons.models import Person
 from vehicles.models import Vehicle
 from centres.models import Centre
 from departments.models import Department
+from django.contrib.auth.models import Group
 import pandas as pd
 import re
 
@@ -51,24 +52,25 @@ for index, row in dict_df.iterrows():
 dict_df = dict_df.dropna(subset=['BADGENO', 'NAME', 'GENDER', 'DEPARTMENT', 'CENTRE', 'MOBILE1'])
 
 for row in dict_df.iloc:
-    b = row.to_dict()['BADGENO'].lower()
+    b = row.to_dict()['BADGENO'].upper()
     if not re.match(r'^\w{2}\d{4}$', b):
         continue
-    n = row.to_dict()['NAME'].title()
-    g = row.to_dict()['GENDER'].capitalize()
+    n = row.to_dict()['NAME'].upper()
+    g = row.to_dict()['GENDER'].upper()
     m = str(row.to_dict()['MOBILE1'])
     if not re.match(r'^\d{10}$', m):
         continue
-    c = row.to_dict()['CENTRE'].lower()
-    d = row.to_dict()['DEPARTMENT'].lower()
+    c = row.to_dict()['CENTRE'].upper()
+    d = row.to_dict()['DEPARTMENT'].upper()
     co = Centre.objects.get(code=c)
     do = Department.objects.get(name=d)
+    gp = Group.objects.get(name='SEWA')
     if g == "Male":
         g = "M"
     else:
         g = "F"
     try:
-        po = Person(badge=b, type='S', centre=co, department=do, full_name=n, gender=g, contact_number=m)
+        po = Person(badge=b, type=gp, centre=co, department=do, full_name=n, gender=g, contact_number=m)
         po.save()
     except Exception as err:
         print("{0} :-- {1}  {2}  {3}  {4}  {5}  {6}".format(err, b, n, g, m, c, d))

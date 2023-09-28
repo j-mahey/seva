@@ -127,7 +127,7 @@
                     </td>
                     <td>{{ mov.person.centre }}</td>
                     <td>{{ mov.person.badge }}</td>
-                    <td>{{ mov.person.get_type_display }}</td>
+                    <td>{{ mov.person.type }}</td>
                     <td>{{ mov.person.full_name }}</td>
                     <td>{{ mov.person.contact_number }}</td>
                     <td>{{ mov.vehicle.vehicle_no }}</td>
@@ -150,31 +150,31 @@
     <div class="tab entry">
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-person">
-            <div>
+            <div id="field_type">
                 <label>Type : </label>
                 {{ person_form.type }}
             </div>
-            <div>
-                <label>Centre : </label>
+            <div id="field_centre">
+                <label >Centre : </label>
                 {{ person_form.centre }}
             </div>
-            <div>
+            <div id="field_badge">
                 <label>Badge : </label>
                 {{ person_form.badge }}
             </div>
-            <div>
+            <div id="field_full_name">
                 <label>Full Name : </label>
                 {{ person_form.full_name }}
             </div>
-            <div>
+            <div id="field_contact_number">
                 <label>Contact Number : </label>
                 {{ person_form.contact_number }}
             </div>
-            <div>
+            <div id="field_gender">
                 <label>Gender : </label>
                 {{ person_form.gender }}
             </div>
-            <div>
+            <div id="field_department">
                 <label>Department : </label>
                 {{ person_form.department }}
             </div>
@@ -204,10 +204,6 @@
                 {{ vh_form.vehicle_no }}
             </div>
             <div>
-                <label>Custom Id : </label>
-                {{ vh_form.custom_id }}
-            </div>
-            <div>
                 <label for="clock-in">Clock In : </label>
                 <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
             </div>
@@ -219,7 +215,6 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
-        {% if movement_all|length > 0 %}
         <table>
             <thead>
             <tr>
@@ -238,12 +233,13 @@
                 <th>Out Time</th>
             </tr>
         </thead>
+        {% if movement_all|length > 0 %}
         <tbody>
             {% for mov in movement_all %}
             <tr>
                 <td>{{ mov.person.centre }}</td>
                 <td>{{ mov.person.badge }}</td>
-                <td>{{ mov.person.get_type_display }}</td>
+                <td>{{ mov.person.type }}</td>
                 <td>{{ mov.person.full_name }}</td>
                 <td>{{ mov.person.contact_number }}</td>
                 <td>{{ mov.vehicle.vehicle_no }}</td>
@@ -255,8 +251,6 @@
             {% endfor %}
         </tbody>
         </table>
-        {% else %}
-        <p>No attendence for today yet.</p>
         {% endif %}
         <table>
             <thead>

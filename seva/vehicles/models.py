@@ -17,3 +17,7 @@ class Vehicle(models.Model):
 
     def __str__(self):
        return self.vehicle_no
+    
+    def save(self, *args, **kwargs):
+        self.custom_id = str(len(Vehicle.objects.all()) + 1)
+        super(Vehicle, self).save(*args, **kwargs)
