@@ -5,17 +5,18 @@
         <style>
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
             /* ~~~~~~~~~~~ ALL */
+            html {
+                height: 100%;
+            }
             body {  
                 font-family: Calibri, Helvetica, sans-serif;  
-                background-color: rgb(100, 100, 100);
-                color: rgb(255, 255, 255); 
+                background-color: rgb(200, 200, 200);
+                height: 90%;
             }
             button, input, select{
-                color: rgb(255, 255, 255); 
-                background-color: rgb(50, 50, 50);
+                background-color: rgb(240, 240, 240);
                 padding: 0.5rem;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
+                border: none;
                 margin: 0.2rem;
             }
             form {
@@ -28,14 +29,14 @@
                 width: 100%;
             }
             .login h1 {
-                background-color: rgb(70, 70, 70);
+                /* background-color: rgb(70, 70, 70); */
                 padding: 1rem;
             }
             .login input[type=text], .login input[type=password] {
                 display: inline-block;
                 padding: 0.5rem;
-                color: rgb(255, 255, 255);
-                background-color: rgb(50, 50, 50);
+                /* color: rgb(255, 255, 255); */
+                /* background-color: rgb(50, 50, 50); */
             }
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -46,7 +47,8 @@
                 left: 0;
                 width: 100%;
                 min-width: 1050px;
-                background-color: rgb(30, 30, 30);
+                background-color: rgb(248, 248, 248);
+                /* color: white; */
             }
             .logout p {
                 display: inline-block;
@@ -56,27 +58,26 @@
                 color: #FF0000;
             }
             .logout .success {
-                color: #33FF3C;
+                color: #0d00c9;
             }
 
             .logout button{
                 display: inline-block;
                 padding: 0.5rem;;
-                border: solid rgb(50, 50, 50);
-                border-width: 2px;
+                background-color: rgb(200, 200, 200);
             }
             .logout button:hover {
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
+                background-color: rgb(210, 210, 210);
             }
             .logout button:focus {
-                background-color: rgb(30, 30, 30);
+                background-color: rgb(210, 210, 210);
             }
-
+            
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
             /* ~~~~~~~~~~~ TABS */
             .tabs {
                 margin-top: 80px;
+                height: 100%;
                 display: flex;
                 flex-wrap: wrap;
             }
@@ -86,16 +87,17 @@
                 cursor: pointer;
                 padding: 10px 15px;
                 margin-right: 0.2rem;
-                background-color: rgb(30, 30, 30);
+                background-color: rgb(220, 220, 220);
             }
             .tabs .tab {
                 order: 9;
                 flex-grow: 1;
                 width: 100%;
+                height: 90%;
                 min-width: 1050px;
                 display: none;
                 padding: 1rem;
-                background-color: rgb(70, 70, 70);
+                background-color: white;
             }
             .tabs input[type=checkbox] {
                 accent-color: blue;
@@ -104,57 +106,44 @@
                 display: none; 
             }
             .tabs input[type="radio"]:checked + label {
-                background-color: rgb(70, 70, 70);
+                background-color: white;
             }
             .tabs input[type="radio"]:checked + label + .tab {
                 display: inline-block;
             }
             .tab form {
                 padding: 20px;
-                border: solid rgb(50, 50, 50);
+                border: solid rgb(230, 230, 230);
+                border-radius: 10px;
                 border-width: 2px;
+
             }
             .tab form button {
                 float: right;
             }
             .tab form button:hover {
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
+                background-color: rgb(230, 230, 230);
             }
             .tab form button:focus {
-                background-color: rgb(30, 30, 30);
+                background-color: rgb(230, 230, 230);
             }
-            
             /* ~~~~~~~~~~~ CLOCK */
-            .clock {
-                padding: 10px 15px;
-                background-color: rgb(70, 70, 70);
-                min-width: 1050px;
-            }
-            .clock button:hover {
-                border: solid rgb(100, 100, 100);
-                border-width: 2px;
-            }
-            .clock button:focus {
-                background-color: rgb(30, 30, 30);
-            }
-            .clock .clock-search {
-                border: none;
-            }
             .clock-search input[type=text] {
                 width: 810px;
             }
-
             /* ~~~~~~~~~~~ ENTRY */
             .tab.entry label  {
                 display: inline-block;
                 text-align: right;
                 width: 28%;
                 border: none;
-                background-color: rgb(70, 70, 70);
             }
             .tab.entry input[type=text]  {
                 width: 55%;
+            }
+            /* ~~~~~~~~~~~ REPORT */
+            .tab.clock-out button {
+                float: none;
             }
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
@@ -163,15 +152,15 @@
                 margin: 15px;
             }
             table thead tr {
-                background-color: #2c2c2c;
-                color: #ffffff;
+                background-color: rgb(230, 230, 230);
+                /* color: #ffffff; */
                 text-align: left;
             }
             table th, table td {
                 padding: 8px 15px;
             }
             table tbody tr:nth-of-type(even) {
-                background-color: rgb(60, 60, 60);
+                background-color: rgb(240, 240, 240);
             }
         </style>
         <script>
@@ -186,7 +175,6 @@
                         badge.style.display = 'block';
                     }
                 });
-
                 // Trigger the input event initially if needed
                 type.dispatchEvent(new Event('input'));
             });

@@ -35,6 +35,7 @@
                 <button type="submit">Search</button>
             </div>
         </form>
+        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
         {% if persons|length > 0 %}
         <form class="clock-in" action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="clock-in">
@@ -96,51 +97,6 @@
             </table>
             <button type="submit">Clock In</button>
         </form>
-        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-        {% endif %}
-        {% if movement_in|length > 0 %}
-        <form class="clock-out" action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="clock-out">
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="9">CLOCKED IN : {{movement_in|length}}</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>Centre</th>
-                    <th>Badge</th>
-                    <th>Type</th>
-                    <th>Full Name</th>
-                    <th>Contact</th>
-                    <th>Vehicle No</th>
-                    <th>Vehicle Type</th>
-                    <th>In Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mov in movement_in %}
-                <tr>
-                    <td>
-                        <input type="radio" id={{mov.person.badge}} name="clock-out" value={{mov.id}}>
-                        <label for={{mov.person.badge}}></label>
-                    </td>
-                    <td>{{ mov.person.centre }}</td>
-                    <td>{{ mov.person.badge }}</td>
-                    <td>{{ mov.person.type }}</td>
-                    <td>{{ mov.person.full_name }}</td>
-                    <td>{{ mov.person.contact_number }}</td>
-                    <td>{{ mov.vehicle.vehicle_no }}</td>
-                    <td>{{ mov.vehicle.get_type_display }}</td>
-                    <td>{{ mov.in_time }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            </table>
-            <button type="submit">Clock Out</button>
-        </form>
-        {% else %}
-        <p>No one currently clocked in.</p>
         {% endif %}
     </div>
 
@@ -215,6 +171,51 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
+        {% if movement_in|length > 0 %}
+        <form class="clock-out" action="" method="POST">{% csrf_token %}
+            <input type="hidden" name="action" value="clock-out">
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="9">CLOCKED IN : {{movement_in|length}}</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th>Centre</th>
+                    <th>Badge</th>
+                    <th>Type</th>
+                    <th>Full Name</th>
+                    <th>Contact</th>
+                    <th>Vehicle No</th>
+                    <th>Vehicle Type</th>
+                    <th>In Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for mov in movement_in %}
+                <tr>
+                    <td>
+                        <input type="radio" id={{mov.person.badge}} name="clock-out" value={{mov.id}}>
+                        <label for={{mov.person.badge}}></label>
+                    </td>
+                    <td>{{ mov.person.centre }}</td>
+                    <td>{{ mov.person.badge }}</td>
+                    <td>{{ mov.person.type }}</td>
+                    <td>{{ mov.person.full_name }}</td>
+                    <td>{{ mov.person.contact_number }}</td>
+                    <td>{{ mov.vehicle.vehicle_no }}</td>
+                    <td>{{ mov.vehicle.get_type_display }}</td>
+                    <td>{{ mov.in_time }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+            <button type="submit">Clock Out</button>
+        </form>
+        {% else %}
+        <p>No one currently clocked in.</p>
+        {% endif %}
+        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
         <table>
             <thead>
             <tr>
@@ -252,6 +253,7 @@
         </tbody>
         </table>
         {% endif %}
+        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
         <table>
             <thead>
                 <tr>
