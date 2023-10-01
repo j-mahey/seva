@@ -40,11 +40,13 @@ def home(request):
         if request.GET.get("action") == "clock-search":
             query = request.GET.get("query")
             model = request.GET.get("model-search")
-            centre = Centre.objects.get(code=request.GET.get("centre-search"))
+            # centre = Centre.objects.get(code=request.GET.get("centre-search"))
 
             if query.strip() != "":
                 if model == "person":
-                    person_search = Person.objects.filter(Q(full_name__contains=query.lower()) | Q(badge__contains=query.lower()), centre=centre)
+                    person_search = Person.objects.filter(Q(full_name__contains=query.lower()) |
+                                                          Q(centre_badge__contains=query.lower()) |
+                                                          Q(contact_number__contains=query))
                     if len(person_search) == 0:
                         results = "{0} not found".format(query)
                         results_code = 0
@@ -57,7 +59,9 @@ def home(request):
                             clocked = 1
 
                 if model == "vehicle":
-                    vehicle_search = Vehicle.objects.filter(Q(vehicle_no__contains=query.upper()) | Q(custom_id__contains=query))
+                    vehicle_search = Vehicle.objects.filter(Q(vehicle_no__contains=query.upper()) |
+                                                            Q(custom_id__contains=query) |
+                                                            Q(person__contact_number__contains=query))
                     if len(vehicle_search) == 0:
                         results = "{0} not found".format(query)
                         results_code = 0
