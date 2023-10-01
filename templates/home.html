@@ -23,79 +23,272 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="clock" checked="checked">
     <label class="tabs-select" for="clock"><b>CLOCK</b></label>
     <div class="tab clock">
+
         <form class="clock-search" method="GET">
             <input type="hidden" name="action" value="clock-search">
             <div>
+                <select name="model-search" id="model-search" required>
+                    <option value="person">Person</option>
+                    <option value="vehicle">Vehicle</option>
+                </select>
                 <select name="centre-search" required>
                     {% for c in centres %}
                     <option value={{c}}>{{c}}</option>
                     {% endfor %}
                 </select>
-                <input type="text" placeholder="Enter Badge or Vehicle Number" name="query" />
+                <input type="text" name="query" />
                 <button type="submit">Search</button>
             </div>
         </form>
+
         <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
-        {% if persons|length > 0 %}
+        {% if person_search|length > 1 or vehicle_search|length > 1 %}
+        <form class="get-info" action="" method="GET">
+            <input type="hidden" name="action" value="get-info">
+            <div class="table-scroll">
+                {% if vehicle_search|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">VEHICLE INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Vehicle No</th>
+                            <th>Custom Id</th>
+                            <th>Person</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicle_search %}
+                        <tr>
+                            <td>
+                                <input type="radio" id={{vehicle.vehicle_no}} name="vehicle" value={{vehicle.vehicle_no}}>
+                                <label for={{vehicle.vehicle_no}}>{{ vehicle.vehicle_no }}</label>
+                            </td>
+                            <td>{{ vehicle.custom_id }}</td>
+                            <td>{{ vehicle.person.badge }}</td>
+                            <td>{{ vehicle.get_type_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+                {% if person_search|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="6">PERSON INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Badge</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Gender</th>
+                            <th>Contact Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for person in person_search %}
+                        <tr>
+                            <td>
+                                <input type="radio" id={{person.badge}} name="person" value={{person.centre_badge}} required>
+                                <label for={{person.badge}}>{{ person.badge }}</label>
+                            </td>
+                            <td>{{ person.full_name }}</td>
+                            <td>{{ person.department }}</td>
+                            <td>{{ person.get_gender_display }}</td>
+                            <td>{{ person.contact_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                {% endif %}
+            </div>
+            <button type="submit">Get Info</button>
+        </form>
+        {% endif %}
+
+        {% if person_info|length == 1 %}
         <form class="clock-in" action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="clock-in">
-            {% if vehicles|length > 0 %}
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="4">VEHICLE INFO</th>
-                </tr>
-                <tr>
-                    <th>Vehicle No</th>
-                    <th>Custom Id</th>
-                    <th>Person</th>
-                    <th>Type</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for vehicle in vehicles %}
-                <tr>
-                    <td>
-                        <input type="radio" id={{vehicle.vehicle_no}} name="vehicle" value={{vehicle.vehicle_no}}>
-                        <label for={{vehicle.vehicle_no}}>{{ vehicle.vehicle_no }}</label>
-                    </td>
-                    <td>{{ vehicle.custom_id }}</td>
-                    <td>{{ vehicle.person.badge }}</td>
-                    <td>{{ vehicle.get_type_display }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            </table>
-            {% endif %}
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="6">PERSON INFO</th>
-                </tr>
-                <tr>
-                    <th>Badge</th>
-                    <th>Full Name</th>
-                    <th>Department</th>
-                    <th>Gender</th>
-                    <th>Contact Number</th>
-                </tr>
+            {% if in_status == 0 %}
+                <input type="hidden" name="action" value="clock-in">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="6">PERSON INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Badge</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Gender</th>
+                            <th>Contact Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for person in person_info %}
+                        <tr>
+                            <td>
+                                <input type="radio" id={{person.badge}} name="person" value={{person.centre_badge}} checked required>
+                                <label for={{person.badge}}>{{ person.badge }}</label>
+                            </td>
+                            <td>{{ person.full_name }}</td>
+                            <td>{{ person.department }}</td>
+                            <td>{{ person.get_gender_display }}</td>
+                            <td>{{ person.contact_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">VEHICLE INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Vehicle No</th>
+                            <th>Custom Id</th>
+                            <th>Person</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicle_info %}
+                        <tr>
+                            <td>
+                                <input type="radio" id={{vehicle.vehicle_no}} name="vehicle" value={{vehicle.vehicle_no}}>
+                                <label for={{vehicle.vehicle_no}}>{{ vehicle.vehicle_no }}</label>
+                            </td>
+                            <td>{{ vehicle.custom_id }}</td>
+                            <td>{{ vehicle.person.badge }}</td>
+                            <td>{{ vehicle.get_type_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="9">TODAY MOVEMENT</th>
+                    </tr>
+                    <tr>
+                        <th>Centre</th>
+                        <th>Badge</th>
+                        <th>Type</th>
+                        <th>Full Name</th>
+                        <th>Contact</th>
+                        <th>Vehicle No</th>
+                        <th>Vehicle Type</th>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+
+                    </tr>
                 </thead>
                 <tbody>
-                {% for person in persons %}
-                <tr>
-                    <td>
-                        <input type="radio" id={{person.badge}} name="person" value={{person.centre_badge}} required>
-                        <label for={{person.badge}}>{{ person.badge }}</label>
-                    </td>
-                    <td>{{ person.full_name }}</td>
-                    <td>{{ person.department }}</td>
-                    <td>{{ person.get_gender_display }}</td>
-                    <td>{{ person.contact_number }}</td>
-                </tr>
-                {% endfor %}
+                    {% for mov in movement_info %}
+                    <tr>
+ 
+                        <td>{{ mov.person.centre }}</td>
+                        <td>{{ mov.person.badge }}</td>
+                        <td>{{ mov.person.type }}</td>
+                        <td>{{ mov.person.full_name }}</td>
+                        <td>{{ mov.person.contact_number }}</td>
+                        <td>{{ mov.vehicle.vehicle_no }}</td>
+                        <td>{{ mov.vehicle.get_type_display }}</td>
+                        <td>{{ mov.in_time }}</td>
+                        <td>{{ mov.out_time }}</td>
+                    </tr>
+                    {% endfor %}
                 </tbody>
-            </table>
-            <button type="submit">Clock In</button>
+                </table>
+                <button type="submit">Clock In</button>
+            {% else %}
+                <input type="hidden" name="action" value="clock-out">
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="5">PERSON INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Badge</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Gender</th>
+                            <th>Contact Number</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for person in person_info %}
+                        <tr>
+                            <td>{{ person.badge }}</td>
+                            <td>{{ person.full_name }}</td>
+                            <td>{{ person.department }}</td>
+                            <td>{{ person.get_gender_display }}</td>
+                            <td>{{ person.contact_number }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="4">VEHICLE INFO</th>
+                        </tr>
+                        <tr>
+                            <th>Vehicle No</th>
+                            <th>Custom Id</th>
+                            <th>Person</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vehicle in vehicle_info %}
+                        <tr>
+                            <td>{{ vehicle.custom_id }}</td>
+                            <td>{{ vehicle.person.badge }}</td>
+                            <td>{{ vehicle.get_type_display }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="8">TODAY MOVEMENT</th>
+                    </tr>
+                    <tr>
+                        <th>Badge</th>
+                        <th>Type</th>
+                        <th>Full Name</th>
+                        <th>Contact</th>
+                        <th>Vehicle No</th>
+                        <th>Vehicle Type</th>
+                        <th>In Time</th>
+                        <th>Out Time</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for mov in movement_info %}
+                    <tr>
+                        <td>
+                            <input type="radio" id={{mov.person.centre_badge}} name="clock-out" value={{mov.id}}>
+                            <label for={{mov.person.centre_badge}}>{{ mov.person.centre_badge }}</label>
+                        </td>
+                        <td>{{ mov.person.type }}</td>
+                        <td>{{ mov.person.full_name }}</td>
+                        <td>{{ mov.person.contact_number }}</td>
+                        <td>{{ mov.vehicle.vehicle_no }}</td>
+                        <td>{{ mov.vehicle.get_type_display }}</td>
+                        <td>{{ mov.in_time }}</td>
+                        <td>{{ mov.out_time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                </table>
+                <button type="submit">Clock Out</button>
+            {% endif %}
         </form>
         {% endif %}
     </div>
@@ -171,51 +364,39 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
+        <table>
+            <thead>
+            <tr>
+                <th colspan="8">CLOCKED IN : {{movement_in|length}}</th>
+            </tr>
+            <tr>
+                <th>Centre</th>
+                <th>Badge</th>
+                <th>Type</th>
+                <th>Full Name</th>
+                <th>Contact</th>
+                <th>Vehicle No</th>
+                <th>Vehicle Type</th>
+                <th>In Time</th>
+            </tr>
+        </thead>
         {% if movement_in|length > 0 %}
-        <form class="clock-out" action="" method="POST">{% csrf_token %}
-            <input type="hidden" name="action" value="clock-out">
-            <table>
-                <thead>
-                <tr>
-                    <th colspan="9">CLOCKED IN : {{movement_in|length}}</th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th>Centre</th>
-                    <th>Badge</th>
-                    <th>Type</th>
-                    <th>Full Name</th>
-                    <th>Contact</th>
-                    <th>Vehicle No</th>
-                    <th>Vehicle Type</th>
-                    <th>In Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for mov in movement_in %}
-                <tr>
-                    <td>
-                        <input type="radio" id={{mov.person.badge}} name="clock-out" value={{mov.id}}>
-                        <label for={{mov.person.badge}}></label>
-                    </td>
-                    <td>{{ mov.person.centre }}</td>
-                    <td>{{ mov.person.badge }}</td>
-                    <td>{{ mov.person.type }}</td>
-                    <td>{{ mov.person.full_name }}</td>
-                    <td>{{ mov.person.contact_number }}</td>
-                    <td>{{ mov.vehicle.vehicle_no }}</td>
-                    <td>{{ mov.vehicle.get_type_display }}</td>
-                    <td>{{ mov.in_time }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-            </table>
-            <button type="submit">Clock Out</button>
-        </form>
-        {% else %}
-        <p>No one currently clocked in.</p>
+        <tbody>
+            {% for mov in movement_in %}
+            <tr>
+                <td>{{ mov.person.centre }}</td>
+                <td>{{ mov.person.badge }}</td>
+                <td>{{ mov.person.type }}</td>
+                <td>{{ mov.person.full_name }}</td>
+                <td>{{ mov.person.contact_number }}</td>
+                <td>{{ mov.vehicle.vehicle_no }}</td>
+                <td>{{ mov.vehicle.get_type_display }}</td>
+                <td>{{ mov.in_time }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
         {% endif %}
-        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
+        </table>
         <table>
             <thead>
             <tr>
@@ -253,7 +434,6 @@
         </tbody>
         </table>
         {% endif %}
-        <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
         <table>
             <thead>
                 <tr>

@@ -1,4 +1,5 @@
 from django.utils import timezone
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -16,39 +17,77 @@ from movement.admin import MovementFilterForm
 
 @login_required
 def home(request):
-    persons = []
-    vehicles = []
+    person_search = []
+    vehicle_search = []
+    person_info = []
+    vehicle_info = []
+    mov_info = []
     mov_in = []
     mov_all = []
     results = "Welcome to Seva"
     results_code = 1
+    clocked = 0
 
     all_centres = [ x[0] for x in Centre.objects.all().values_list("code") ]
     all_departments = [ x[0] for x in Department.objects.all().values_list("name")]
     datetime = timezone.now()
 
     if request.method == "GET":
-        if "query" in request.GET:
+        if request.GET.get("action") == "clock-search":
             query = request.GET.get("query")
+            model = request.GET.get("model-search")
+            field = request.GET.get("field-search")
             centre = Centre.objects.get(code=request.GET.get("centre-search"))
+
             if query.strip() != "":
-                vehicles = Vehicle.objects.filter(vehicle_no=query.upper())
-                if len(vehicles) > 0:
-                    for vehicle in vehicles:
-                        persons.append(vehicle.person)
-                else:
-                    persons = Person.objects.filter(badge=query.lower(), centre=centre)
-                    for person in persons:
-                            vehicles = Vehicle.objects.filter(person=person)
-                if len(persons) == 0:
-                    results = "{0} not found".format(query)
-                    results_code = 0
-        
+                if model == "person":
+                    person_search = Person.objects.filter(Q(full_name__startswith=query.lower()) | Q(badge__startswith=query.lower()), centre=centre)
+                    if len(person_search) == 0:
+                        results = "{0} not found".format(query)
+                        results_code = 0
+                    elif len(person_search) == 1:
+                        vehicle_search = Vehicle.objects.filter(person__in=person_search)
+                        mov_info = Movement.objects.filter(person__in=person_search, date=timezone.now())
+                        if len(Movement.objects.filter(person__in=person_search, out_time=None)) > 0:
+                            clocked = 1
+
+                if model == "vehicle":
+                    if field == "vehicle_no":
+                        vehicle_search = Vehicle.objects.filter(Q(vehicle_no__startswith=query.upper()) | Q(custom_id__startswith=query))
+                    if len(vehicle_search) == 0:
+                        results = "{0} not found".format(query)
+                        results_code = 0
+                    elif len(vehicle_search) == 1:
+                        person_search = [x.person for x in vehicle_search]
+                        mov_info = Movement.objects.filter(person__in=person_search, date=timezone.now())
+                        if len(Movement.objects.filter(person__in=person_search, out_time=None)) > 0:
+                            clocked = 1
+
+        if request.GET.get("action") == "get-info":
+            p = request.GET.get("person")
+            v = request.GET.get("vehicle")
+            if p != None:
+                po = Person.objects.get(centre_badge=p)
+                if p:
+                    person_info = [po]
+                    vehicle_info = Vehicle.objects.filter(person=po)
+                    mov_info = Movement.objects.filter(person=po, date=timezone.now())
+                    if len(Movement.objects.filter(person=po, out_time=None)) > 0:
+                        clocked = 1
+
+            if v != None:
+                vo = Vehicle.objects.get(vehicle_no=v)
+                if v:
+                    vehicle_info = [vo]
+                    person_info = [vo.person]
+                    mov = Movement.objects.filter(person=vo.person, out_time=None)
+                    if len(mov) > 0:
+                        clocked = 1
+
     if request.method == "POST":
         if request.POST.get("action") == "clock-in":
                 p = request.POST.get("person")
                 v = request.POST.get("vehicle")
-
                 if p != None and v != None:
                     po = Person.objects.get(centre_badge=request.POST.get("person"))
                     vo = Vehicle.objects.get(vehicle_no=request.POST.get("vehicle"))
@@ -81,10 +120,10 @@ def home(request):
                         results = "{0} already clocked in".format(vo.vehicle_no)
                         results_code = 0
 
-
         if request.POST.get("action") == "clock-out":
-            Movement.objects.filter(id=request.POST.get("clock-out")).update(out_time=timezone.now())
-            results = "{0} clocked out".format(Movement.objects.get(id=request.POST.get("clock-out")).person.badge)
+            id=request.POST.get("clock-out")
+            Movement.objects.filter(id=id).update(out_time=timezone.now())
+            results = "{0} clocked out".format(Movement.objects.get(id=id).person.badge)
             results_code = 1
 
         if request.POST.get("action") == "create-person":
@@ -144,8 +183,12 @@ def home(request):
     dept_summary["total"]["female"] = all_female
     dept_summary["total"]["total"] = all_male + all_female
 
-    context = {"persons": persons,
-               "vehicles": vehicles,
+    context = {"person_search": person_search,
+               "vehicle_search": vehicle_search,
+               "person_info": person_info,
+               "vehicle_info": vehicle_info,
+               "movement_info": mov_info,
+               "in_status": clocked,
                "departments": all_departments,
                "centres": all_centres,
                "movement_in": mov_in,

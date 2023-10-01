@@ -116,7 +116,7 @@
                 border: solid rgb(230, 230, 230);
                 border-radius: 10px;
                 border-width: 2px;
-
+                overflow-y: auto;
             }
             .tab form button {
                 float: right;
@@ -129,7 +129,7 @@
             }
             /* ~~~~~~~~~~~ CLOCK */
             .clock-search input[type=text] {
-                width: 810px;
+                width: 600px;
             }
             /* ~~~~~~~~~~~ ENTRY */
             .tab.entry label  {
@@ -148,6 +148,10 @@
 
             /* ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ */
             /* ~~~~~~~~~~~ TABLES */
+            .table-scroll {
+                overflow-y: auto;
+                max-height: 500px;
+            }
             table {
                 margin: 15px;
             }
@@ -177,6 +181,34 @@
                 });
                 // Trigger the input event initially if needed
                 type.dispatchEvent(new Event('input'));
+
+                // const model = document.querySelector('#model-search');
+                // var select = document.querySelector("#field-search");
+                // model.addEventListener('input', function () {
+                //     select.innerHTML = "";
+                //     if (model.value === "person") {
+                //         var option = document.createElement('option');
+                //         option.text = "Badge";
+                //         option.value = "badge";
+                //         select.add(option, 0);
+
+                //         var option = document.createElement('option');
+                //         option.text = "Full Name";
+                //         option.value = "full_name";
+                //         select.add(option, 0);
+                //     } else {
+                //         var option = document.createElement('option');
+                //         option.text = "Vehicle No";
+                //         option.value = "vehicle_no";
+                //         select.add(option, 0);
+
+                //         var option = document.createElement('option');
+                //         option.text = "Custom Id";
+                //         option.value = "custom_id";
+                //         select.add(option, 0);
+                //     }
+                // });
+                // model.dispatchEvent(new Event('input'));
             });
         </script>
     </head>
