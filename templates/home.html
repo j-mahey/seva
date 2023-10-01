@@ -50,12 +50,13 @@
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="4">VEHICLE INFO</th>
+                            <th colspan="5">VEHICLE INFO</th>
                         </tr>
                         <tr>
                             <th>Vehicle No</th>
                             <th>Custom Id</th>
                             <th>Person</th>
+                            <th>Contact</th>
                             <th>Type</th>
                         </tr>
                     </thead>
@@ -68,6 +69,7 @@
                             </td>
                             <td>{{ vehicle.custom_id }}</td>
                             <td>{{ vehicle.person.badge }}</td>
+                            <td>{{ vehicle.person.contact_number }}</td>
                             <td>{{ vehicle.get_type_display }}</td>
                         </tr>
                         {% endfor %}
