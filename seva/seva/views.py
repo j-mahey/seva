@@ -46,19 +46,20 @@ def home(request):
                         results = "{0} not found".format(query)
                         results_code = 0
                     elif len(person_search) == 1:
-                        vehicle_search = Vehicle.objects.filter(person__in=person_search)
+                        person_info = person_search
+                        vehicle_info = Vehicle.objects.filter(person__in=person_search)
                         mov_info = Movement.objects.filter(person__in=person_search, date=timezone.now())
                         if len(Movement.objects.filter(person__in=person_search, out_time=None)) > 0:
                             clocked = 1
 
                 if model == "vehicle":
-                    if field == "vehicle_no":
-                        vehicle_search = Vehicle.objects.filter(Q(vehicle_no__startswith=query.upper()) | Q(custom_id__startswith=query))
+                    vehicle_search = Vehicle.objects.filter(Q(vehicle_no__startswith=query.upper()) | Q(custom_id__startswith=query))
                     if len(vehicle_search) == 0:
                         results = "{0} not found".format(query)
                         results_code = 0
                     elif len(vehicle_search) == 1:
-                        person_search = [x.person for x in vehicle_search]
+                        vehicle_info = vehicle_search
+                        person_info = [x.person for x in vehicle_search]
                         mov_info = Movement.objects.filter(person__in=person_search, date=timezone.now())
                         if len(Movement.objects.filter(person__in=person_search, out_time=None)) > 0:
                             clocked = 1

@@ -109,7 +109,7 @@
         </form>
         {% endif %}
 
-        {% if person_info|length == 1 %}
+        {% if person_search|length == 1 or vehicle_search|length == 1%}
         <form class="clock-in" action="" method="POST">{% csrf_token %}
             {% if in_status == 0 %}
                 <input type="hidden" name="action" value="clock-in">
