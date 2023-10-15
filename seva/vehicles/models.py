@@ -20,4 +20,10 @@ class Vehicle(models.Model):
     
     def save(self, *args, **kwargs):
         self.custom_id = str(len(Vehicle.objects.all()) + 1)
+
+        for field_name in ['custom_id', 'vehicle_no']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+
         super(Vehicle, self).save(*args, **kwargs)

@@ -29,4 +29,10 @@ class Person(models.Model):
             badge = 'G' + format(int(len(Person.objects.filter(type__name="GUEST")) + 1), '05d')
             self.badge = badge
         self.centre_badge = self.centre.code + self.badge
+
+        for field_name in ['badge', 'full_name']:
+            val = getattr(self, field_name, False)
+            if val:
+                setattr(self, field_name, val.upper())
+
         super(Person, self).save(*args, **kwargs)
