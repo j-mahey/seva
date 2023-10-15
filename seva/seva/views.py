@@ -1,5 +1,7 @@
+import csv
 from django.utils import timezone
 from django.db.models import Q
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -32,8 +34,8 @@ def home(request):
     results_code = 1
     clocked = 0
 
-    all_centres = [ x[0] for x in Centre.objects.all().values_list("code") ]
-    all_departments = [ x[0] for x in Department.objects.all().values_list("name")]
+    all_centres = [x[0] for x in Centre.objects.all().values_list("code")]
+    all_departments = [x[0] for x in Department.objects.all().values_list("name")]
     datetime = timezone.now()
 
     if request.method == "GET":
@@ -42,10 +44,10 @@ def home(request):
             model = request.GET.get("model-search")
             # centre = Centre.objects.get(code=request.GET.get("centre-search"))
 
-            if query.strip() != "":
+            if query.strip() not in "":
                 if model == "person":
-                    person_search = Person.objects.filter(Q(full_name__contains=query.lower()) |
-                                                          Q(centre_badge__contains=query.lower()) |
+                    person_search = Person.objects.filter(Q(full_name__contains=query.upper()) |
+                                                          Q(centre_badge__contains=query.upper()) |
                                                           Q(contact_number__contains=query))
                     if len(person_search) == 0:
                         results = "{0} not found".format(query)
@@ -76,8 +78,8 @@ def home(request):
         if request.GET.get("action") == "get-info":
             p = request.GET.get("person")
             v = request.GET.get("vehicle")
-            if p != None:
-                po = Person.objects.get(centre_badge=p)
+            if p is not None:
+                po = Person.objects.get(centre_badge=p.upper())
                 if p:
                     person_info = [po]
                     vehicle_info = Vehicle.objects.filter(person=po)
@@ -86,8 +88,8 @@ def home(request):
                     if len(mov_in_info) > 0:
                         clocked = 1
 
-            if v != None:
-                vo = Vehicle.objects.get(vehicle_no=v)
+            if v is not None:
+                vo = Vehicle.objects.get(vehicle_no=v.upper())
                 if v:
                     vehicle_info = [vo]
                     person_info = [vo.person]
@@ -100,9 +102,9 @@ def home(request):
         if request.POST.get("action") == "clock-in":
                 p = request.POST.get("person")
                 v = request.POST.get("vehicle")
-                if p != None and v != None:
-                    po = Person.objects.get(centre_badge=request.POST.get("person"))
-                    vo = Vehicle.objects.get(vehicle_no=request.POST.get("vehicle"))
+                if p is not None and v is not None:
+                    po = Person.objects.get(centre_badge=p.upper())
+                    vo = Vehicle.objects.get(vehicle_no=v.upper())
                     if len(Movement.objects.filter(person=po, vehicle=vo, out_time=None)) == 0:
                         mov = Movement(person=po, vehicle=vo)
                         mov.save()
@@ -111,8 +113,8 @@ def home(request):
                     else:
                         results = "{0} with {1} already clocked in".format(po.badge, vo.vehicle_no)
                         results_code = 0
-                elif p != None:
-                    po = Person.objects.get(centre_badge=request.POST.get("person"))
+                elif p is not None:
+                    po = Person.objects.get(centre_badge=p.upper())
                     if len(Movement.objects.filter(person=po, out_time=None)) == 0:
                         mov = Movement(person=po)
                         mov.save()
@@ -121,8 +123,8 @@ def home(request):
                     else:
                         results = "{0} already clocked in".format(po.badge)
                         results_code = 0
-                elif v != None:
-                    vo = Vehicle.objects.get(vehicle_no=request.POST.get("vehicle"))
+                elif v is not None:
+                    vo = Vehicle.objects.get(vehicle_no=v.upper())
                     if len(Movement.objects.filter(vehicle=vo, out_time=None)) == 0:
                         mov = Movement(vehicle=vo)
                         mov.save()
@@ -133,7 +135,7 @@ def home(request):
                         results_code = 0
 
         if request.POST.get("action") == "clock-out":
-            id=request.POST.get("clock-out")
+            id = request.POST.get("clock-out")
             Movement.objects.filter(id=id).update(out_time=timezone.now())
             results = "{0} clocked out".format(Movement.objects.get(id=id).person.badge)
             results_code = 1
@@ -155,10 +157,9 @@ def home(request):
 
         if request.POST.get("action") == "create-vehicle":
             vh_create_form = VehicleCreationForm(request.POST)
-            print('yay')
             if vh_create_form.is_valid():
                 vo = vh_create_form.save(commit=False)
-                po = Person.objects.get(badge=request.POST.get("badge"),
+                po = Person.objects.get(badge=request.POST.get("badge").upper(),
                                         centre=Centre.objects.get(code=request.POST.get("centre")))
                 if po:
                     vo.person = po
@@ -185,16 +186,16 @@ def home(request):
         male = len(Movement.objects.filter(date=timezone.now(), person__department__name = x, person__gender="M"))
         female = len(Movement.objects.filter(date=timezone.now(), person__department__name = x, person__gender="F"))
         dept_summary["depts"].append({"department": dept,
-                             "male": male,
-                             "female": female,
-                             "total": male + female})
+                                      "male": male,
+                                      "female": female,
+                                      "total": male + female})
         all_male += male
         all_female += female
 
     dept_summary["total"]["male"] = all_male
     dept_summary["total"]["female"] = all_female
     dept_summary["total"]["total"] = all_male + all_female
-
+    
     context = {"person_search": person_search,
                "vehicle_search": vehicle_search,
                "person_info": person_info,
@@ -238,3 +239,40 @@ def logout_user(request):
         logout(request)
         return redirect('/login/')
     return render(request, "login.html")
+
+@login_required
+def clock_in_report(request):
+    response = HttpResponse(content_type="clock_in_report/csv")
+    response["Content-Disposition"] = "attachment; filename=.clock_in_reportcsv"
+    writer = csv.writer(response, delimiter=",")
+    writer.writerow(['CENTRE', 'BADGE', 'TYPE', 'FULL NAME', 'CONTACT NO', 'VEHICLE NO', 'VEHICLE TYPE', 'IN TIME'])
+    
+    mov_in = Movement.objects.filter(out_time=None)
+    for i in mov_in:
+        writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.in_time])
+        
+    return response
+
+
+@login_required
+def attend_report(request):
+    response = HttpResponse(content_type="attend_report/csv")
+    response["Content-Disposition"] = "attachment; filename=attend_report.csv"
+    writer = csv.writer(response, delimiter=",")
+    writer.writerow(['CENTRE', 'BADGE', 'TYPE', 'FULL NAME', 'CONTACT NO', 'VEHICLE NO', 'VEHICLE TYPE', 'DATE', 'IN TIME', 'OUT TIME'])
+    
+    mov_all = Movement.objects.filter(date=timezone.now()).exclude(out_time=None)
+    for i in mov_all:
+        writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.date, i.in_time, i.out_time])
+    return response
+
+'''
+@login_required
+def department_report(request):
+    response = HttpResponse(content_type="department_report/csv")
+    response["Content-Disposition"] = "attachment; filename=test.csv"
+    writer = csv.writer(response, delimiter=",")
+    writer.writerow(['centre', 'badge', 'type', 'full_name', 'contact', 'vehicle_no', 'vehicle_type', 'in_time'])
+    
+    return response
+'''

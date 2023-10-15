@@ -6,8 +6,8 @@ from django.contrib.auth.models import Group
 import pandas as pd
 import re
 
-dict_df = pd.read_excel('C:\\Users\\JT\\Documents\\Entry_21_7_23.xlsx', sheet_name='VEHICLE_MASTER')
-
+dict_df = pd.read_excel('~/downloads/entry_29_09_23.xlsx', sheet_name='MASTER')
+'''
 dict_df = dict_df.dropna(subset=['V3NUM1', 'V3NUM2'])
 dict_df = dict_df.fillna('-')
 for index, row in dict_df.iterrows():
@@ -48,8 +48,9 @@ for index, row in dict_df.iterrows():
                 o.save()
     except Exception as err:
         print("{0} :-- {1}  {2}  {3}  {4}  {5}  {6}".format(err, v, v1, v2, u, t, id))
+'''
+dict_df = dict_df.dropna(subset=['BadgeN0', 'Name', 'Gender', 'Department', 'Centre', 'Mobile1'])
 
-dict_df = dict_df.dropna(subset=['BADGENO', 'NAME', 'GENDER', 'DEPARTMENT', 'CENTRE', 'MOBILE1'])
 
 for row in dict_df.iloc:
     b = row.to_dict()['BADGENO'].upper()

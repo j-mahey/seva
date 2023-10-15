@@ -2,8 +2,8 @@ from django.db import models
 
 class Person(models.Model):
     GENDER = [
-        ("M", "Male"),
-        ("F", "Female"),
+        ("M", "MALE"),
+        ("F", "FEMALE"),
     ]
     badge = models.CharField(max_length=6)
     full_name = models.CharField(max_length=25, blank=True, null=True)
@@ -22,11 +22,11 @@ class Person(models.Model):
 
     def save(self, *args, **kwargs):
         # auto create badge for visitor or guest
-        if self.type.name == "Visitor":
-            badge = 'v' + format(int(len(Person.objects.filter(type__name="Visitor")) + 1), '05d')
+        if self.type.name == "VISITOR":
+            badge = 'V' + format(int(len(Person.objects.filter(type__name="VISITOR")) + 1), '05d')
             self.badge = badge
-        if self.type.name == "Guest":
-            badge = 'g' + format(int(len(Person.objects.filter(type__name="Guest")) + 1), '05d')
+        if self.type.name == "GUEST":
+            badge = 'G' + format(int(len(Person.objects.filter(type__name="GUEST")) + 1), '05d')
             self.badge = badge
         self.centre_badge = self.centre.code + self.badge
         super(Person, self).save(*args, **kwargs)

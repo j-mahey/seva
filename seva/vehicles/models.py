@@ -3,12 +3,12 @@ from django.db import models
 
 class Vehicle(models.Model):
     TYPE = [
-        ("CR", "Car"),
-        ("BS", "Bus"),
-        ("AT", "Auto"),
-        ("TP", "Tampo"),
-        ("SC", "Scooter"),
-        ("MC", "Motorcycle")
+        ("CR", "CAR"),
+        ("BS", "BUS"),
+        ("AT", "AUTO"),
+        ("TP", "TAMPO"),
+        ("SC", "SCOOTER"),
+        ("MC", "MOTORCYCLE")
     ]
     type = models.CharField(max_length=3, choices=TYPE)
     custom_id = models.CharField(max_length=10, unique=True, null=True)

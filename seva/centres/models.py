@@ -6,4 +6,4 @@ class Centre(models.Model):
     name = models.CharField(max_length=25, unique=True, blank=True, null=True)
 
     def __str__(self):
-       return self.code
+        return self.code

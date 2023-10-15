@@ -7,13 +7,13 @@
     <form action="/logout/" method="POST">{% csrf_token %}
         <div>
             <input type="hidden" name="action" value="logout">
-            <p>Logged In : <i><b>{{ user.username }}</b></i></p>
+            <p>LOGGED IN : <i><b>{{ user.username }}</b></i></p>
             {% if results_code == 1 %}
                 <p class="success">{{ date }} : &nbsp;<i><b>{{ results }}</b></i></p>
             {% else %}
                 <p class="fail">{{ date }} : &nbsp;<i><b>{{ results }}</b></i></p>
             {% endif %}
-            <button type="submit" value="logout">Log Out</button>
+            <button type="submit" value="logout">LOG OUT</button>
         </div>
     </form>
 </div>
@@ -28,8 +28,8 @@
             <input type="hidden" name="action" value="clock-search">
             <div>
                 <select name="model-search" id="model-search" required>
-                    <option value="person">Person</option>
-                    <option value="vehicle">Vehicle</option>
+                    <option value="person">PERSON</option>
+                    <option value="vehicle">VEHICLE</option>
                 </select>
                 <!-- <select name="centre-search" required>
                     {% for c in centres %}
@@ -37,7 +37,7 @@
                     {% endfor %}
                 </select> -->
                 <input type="text" name="query" />
-                <button type="submit">Search</button>
+                <button type="submit">SEARCH</button>
             </div>
         </form>
 
@@ -53,11 +53,11 @@
                             <th colspan="5">VEHICLE INFO</th>
                         </tr>
                         <tr>
-                            <th>Vehicle No</th>
-                            <th>Custom Id</th>
-                            <th>Person</th>
-                            <th>Contact</th>
-                            <th>Type</th>
+                            <th>VEHICLE NO</th>
+                            <th>CUSTOM ID</th>
+                            <th>PERSON</th>
+                            <th>CONTACT</th>
+                            <th>TYPE</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -83,11 +83,11 @@
                             <th colspan="6">PERSON INFO</th>
                         </tr>
                         <tr>
-                            <th>Badge</th>
-                            <th>Full Name</th>
-                            <th>Department</th>
-                            <th>Gender</th>
-                            <th>Contact Number</th>
+                            <th>BADGE</th>
+                            <th>FULL NAME</th>
+                            <th>DEPARTMENT</th>
+                            <th>GENDER</th>
+                            <th>CONTACT NUMBER</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -107,7 +107,7 @@
                 </table>
                 {% endif %}
             </div>
-            <button type="submit">Get Info</button>
+            <button type="submit">GET INFO</button>
         </form>
         {% endif %}
 
@@ -121,11 +121,11 @@
                             <th colspan="6">PERSON INFO</th>
                         </tr>
                         <tr>
-                            <th>Badge</th>
-                            <th>Full Name</th>
-                            <th>Department</th>
-                            <th>Gender</th>
-                            <th>Contact Number</th>
+                            <th>BADGE</th>
+                            <th>FULL NAME</th>
+                            <th>DEPARTMENT</th>
+                            <th>GENDER</th>
+                            <th>CONTACT NUMBER</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -149,10 +149,10 @@
                             <th colspan="4">VEHICLE INFO</th>
                         </tr>
                         <tr>
-                            <th>Vehicle No</th>
-                            <th>Custom Id</th>
-                            <th>Person</th>
-                            <th>Type</th>
+                            <th>VEHICLE NO</th>
+                            <th>CUSTOM ID</th>
+                            <th>PERSON</th>
+                            <th>TYPE</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -175,15 +175,15 @@
                         <th colspan="9">TODAY MOVEMENT</th>
                     </tr>
                     <tr>
-                        <th>Centre</th>
-                        <th>Badge</th>
-                        <th>Type</th>
-                        <th>Full Name</th>
-                        <th>Contact</th>
-                        <th>Vehicle No</th>
-                        <th>Vehicle Type</th>
-                        <th>In Time</th>
-                        <th>Out Time</th>
+                        <th>CENTER</th>
+                        <th>BADGE</th>
+                        <th>TYPE</th>
+                        <th>FULL NAME</th>
+                        <th>CONTACT</th>
+                        <th>VEHICLE NO</th>
+                        <th>VEHICLE TYPE</th>
+                        <th>IN TIME</th>
+                        <th>OUT TIME</th>
 
                     </tr>
                 </thead>
@@ -204,7 +204,7 @@
                     {% endfor %}
                 </tbody>
                 </table>
-                <button type="submit">Clock In</button>
+                <button type="submit">CLOCK IN</button>
             {% else %}
                 <input type="hidden" name="action" value="clock-out">
                 <table>
@@ -213,11 +213,11 @@
                             <th colspan="5">PERSON INFO</th>
                         </tr>
                         <tr>
-                            <th>Badge</th>
-                            <th>Full Name</th>
-                            <th>Department</th>
-                            <th>Gender</th>
-                            <th>Contact Number</th>
+                            <th>BADGE</th>
+                            <th>FULL NAME</th>
+                            <th>DEPARTMENT</th>
+                            <th>GENDER</th>
+                            <th>CONTACT NUMBER</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -238,15 +238,16 @@
                             <th colspan="4">VEHICLE INFO</th>
                         </tr>
                         <tr>
-                            <th>Vehicle No</th>
-                            <th>Custom Id</th>
-                            <th>Person</th>
-                            <th>Type</th>
+                            <th>VEHICLE NO</th>
+                            <th>CUSTOM ID</th>
+                            <th>PERSON</th>
+                            <th>TYPE</th>
                         </tr>
                     </thead>
                     <tbody>
                         {% for vehicle in vehicle_info %}
                         <tr>
+                            <td>{{ vehicle.vehicle_no }}</td>
                             <td>{{ vehicle.custom_id }}</td>
                             <td>{{ vehicle.person.badge }}</td>
                             <td>{{ vehicle.get_type_display }}</td>
@@ -260,14 +261,14 @@
                         <th colspan="8">TODAY MOVEMENT</th>
                     </tr>
                     <tr>
-                        <th>Badge</th>
-                        <th>Type</th>
-                        <th>Full Name</th>
-                        <th>Contact</th>
-                        <th>Vehicle No</th>
-                        <th>Vehicle Type</th>
-                        <th>In Time</th>
-                        <th>Out Time</th>
+                        <th>BADGE</th>
+                        <th>TYPE</th>
+                        <th>FULL NAME</th>
+                        <th>CONTACT</th>
+                        <th>VEHICLE NO</th>
+                        <th>VEHICLE TYPE</th>
+                        <th>IN TIME</th>
+                        <th>OUT TIME</th>
 
                     </tr>
                 </thead>
@@ -301,7 +302,7 @@
                     {% endfor %}
                 </tbody>
                 </table>
-                <button type="submit">Clock Out</button>
+                <button type="submit">CLOCK OUT</button>
             {% endif %}
         </form>
         {% endif %}
@@ -314,63 +315,64 @@
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-person">
             <div id="field_type">
-                <label>Type : </label>
+                <label>TYPE : </label>
                 {{ person_form.type }}
             </div>
             <div id="field_centre">
-                <label >Centre : </label>
+                <label>CENTRE : </label>
                 {{ person_form.centre }}
             </div>
             <div id="field_badge">
-                <label>Badge : </label>
+                <label>BADGE : </label>
                 {{ person_form.badge }}
             </div>
             <div id="field_full_name">
-                <label>Full Name : </label>
+                <label>FULL NAME : </label>
                 {{ person_form.full_name }}
             </div>
             <div id="field_contact_number">
-                <label>Contact Number : </label>
+                <label>CONTACT NUMBER : </label>
                 {{ person_form.contact_number }}
             </div>
             <div id="field_gender">
-                <label>Gender : </label>
+                <label>GENDER : </label>
                 {{ person_form.gender }}
             </div>
             <div id="field_department">
-                <label>Department : </label>
+                <label>DEPARTMENT : </label>
                 {{ person_form.department }}
             </div>
             <div>
-                <label for="clock-in">Clock In :  </label>
+                <label for="clock-in">CLOCK IN :  </label>
                 <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
             </div>
-            <button type="submit">Create Person</button>
+            <button type="submit">CREATE PERSON</button>
         </form>
+
         <div><p>&nbsp;&nbsp;&nbsp;&nbsp;</p></div>
         <form action="" method="POST">{% csrf_token %}
             <input type="hidden" name="action" value="create-vehicle">
             <div>
-                <label>Centre : </label>
+                <label>CENTRE : </label>
                 {{ vh_form.centre }}
             </div>
             <div>
-                <label>Badge : </label>
+                <label>BADGE : </label>
                 {{ vh_form.badge }}
             </div>
             <div>
-                <label>Type : </label>
+                <label>TYPE : </label>
                 {{ vh_form.type }}
             </div>
             <div>
-                <label>Vehicle No. : </label>
+                <label>VEHICLE NO : </label>
                 {{ vh_form.vehicle_no }}
             </div>
             <div>
-                <label for="clock-in">Clock In : </label>
+                <label for="clock-in">CLOCK IN : </label>
                 <input type="checkbox" id="clock-in" name="clock-in" value="clock-in">
             </div>
-            <button type="submit">Create Vehicle</button>
+            <button type="submit">CREATE VEHICLE</button>
         </form>
     </div>
 
@@ -378,57 +380,58 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
-        <table>
-            <thead>
-            <tr>
-                <th colspan="8">CLOCKED IN : {{movement_in|length}}</th>
-            </tr>
-            <tr>
-                <th>Centre</th>
-                <th>Badge</th>
-                <th>Type</th>
-                <th>Full Name</th>
-                <th>Contact</th>
-                <th>Vehicle No</th>
-                <th>Vehicle Type</th>
-                <th>In Time</th>
-            </tr>
-        </thead>
-        {% if movement_in|length > 0 %}
-        <tbody>
-            {% for mov in movement_in %}
-            <tr>
-                <td>{{ mov.person.centre }}</td>
-                <td>{{ mov.person.badge }}</td>
-                <td>{{ mov.person.type }}</td>
-                <td>{{ mov.person.full_name }}</td>
-                <td>{{ mov.person.contact_number }}</td>
-                <td>{{ mov.vehicle.vehicle_no }}</td>
-                <td>{{ mov.vehicle.get_type_display }}</td>
-                <td>{{ mov.in_time }}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        {% endif %}
+		<table>
+			<thead>
+				<tr>
+					<th colspan="8">CLOCKED IN : {{movement_in|length}}<button onclick="location.href='/clock-in-report';" style="float: right;" type="button">DOWNLOAD</button></th>
+				</tr>
+				<tr>
+					<th>CENTRE</th>
+					<th>BADGE</th>
+					<th>TYPE</th>
+					<th>FULL NAME</th>
+					<th>CONTACT</th>
+					<th>VEHICLE NO</th>
+					<th>VEHICLE TYPE</th>
+					<th>IN TIME</th>
+				</tr>
+			</thead>
+			{% if movement_in|length > 0 %}
+			<tbody>
+				{% for mov in movement_in %}
+				<tr>
+					<td>{{ mov.person.centre }}</td>
+					<td>{{ mov.person.badge }}</td>
+					<td>{{ mov.person.type }}</td>
+					<td>{{ mov.person.full_name }}</td>
+					<td>{{ mov.person.contact_number }}</td>
+					<td>{{ mov.vehicle.vehicle_no }}</td>
+					<td>{{ mov.vehicle.get_type_display }}</td>
+					<td>{{ mov.in_time }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			{% endif %}
         </table>
+
         <table>
             <thead>
             <tr>
-                <th colspan="10">TODAY ATTENDENCE : {{movement_all|length}}</th>
+                <th colspan="10">TODAY ATTENDENCE : {{movement_all|length}}<button onclick="location.href='/attend-report';" style="float: right;" type="button">DOWNLOAD</button></th>
             </tr>
             <tr>
-                <th>Centre</th>
-                <th>Badge</th>
-                <th>Type</th>
-                <th>Full Name</th>
-                <th>Contact</th>
-                <th>Vehicle No</th>
-                <th>Vehicle Type</th>
-                <th>Date</th>
-                <th>In Time</th>
-                <th>Out Time</th>
+                <th>CENTRE</th>
+                <th>BADGE</th>
+                <th>TYPE</th>
+                <th>FULL NAME</th>
+                <th>CONTACT</th>
+                <th>VEHICLE NO</th>
+                <th>VEHICLE TYPE</th>
+                <th>DATE</th>
+                <th>IN TIME</th>
+                <th>OUT TIME</th>
             </tr>
-        </thead>
+			</thead>
         {% if movement_all|length > 0 %}
         <tbody>
             {% for mov in movement_all %}
@@ -448,10 +451,11 @@
         </tbody>
         </table>
         {% endif %}
-        <table>
+        
+		<table>
             <thead>
                 <tr>
-                    <th colspan="4">DEPARTMENT REPORT</th>
+                    <th colspan="4">DEPARTMENT REPORT<button onclick="location.href='/department-report';" style="float: right;" type="button">DOWNLOAD</button></th>
                 </tr>
                 <tr>
                     <th>NAME</th>

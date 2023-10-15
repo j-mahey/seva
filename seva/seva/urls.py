@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.urls import path
 
 
-from .views import home, login_user, logout_user
+from .views import home, login_user, logout_user, clock_in_report, attend_report
 
 urlpatterns = [
     path('', home),
     path('login/', login_user),
     path('logout/', logout_user),
     path('admin/', admin.site.urls),
+    path('clock-in-report', clock_in_report),
+    path('attend-report', attend_report)
 ]

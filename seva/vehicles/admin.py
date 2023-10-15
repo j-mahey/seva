@@ -8,7 +8,8 @@ from persons.models import Person
 
 class VehicleCreationForm(forms.ModelForm):
 
-    centre = forms.ChoiceField(choices=[(x.code, x.code) for x in Centre.objects.all()], widget=forms.Select)
+    # centre = forms.ChoiceField(choices=[(x.code, x.code) for x in Centre.objects.all()], widget=forms.Select)
+    centre = forms.CharField()
     badge = forms.CharField()
     class Meta:
         model = Vehicle
