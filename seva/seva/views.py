@@ -263,7 +263,11 @@ def attend_report(request):
     
     mov_all = Movement.objects.filter(date=timezone.now()).exclude(out_time=None)
     for i in mov_all:
-        writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.date, i.in_time, i.out_time])
+        if i.vehicle is not None:
+            writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.date, i.in_time, i.out_time])
+        else:
+            writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, "", "", i.date, i.in_time, i.out_time])
+
     return response
 
 '''
