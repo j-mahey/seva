@@ -380,6 +380,7 @@
     <input class="tabs-select tabs-radio" type="radio" name="set" id="report">
     <label class="tabs-select" for="report"><b>REPORT</b></label>
     <div class="tab report">
+        <div class="table-scroll">
 		<table>
 			<thead>
 				<tr>
@@ -413,7 +414,9 @@
 			</tbody>
 			{% endif %}
         </table>
+		</div>
 
+        <div class="table-scroll">
         <table>
             <thead>
             <tr>
@@ -451,7 +454,10 @@
         </tbody>
         </table>
         {% endif %}
-        
+		</div>
+
+
+        <div class="table-scroll">
 		<table>
             <thead>
                 <tr>
@@ -477,6 +483,7 @@
                 {% endfor %}
             </tbody>
         </table>
+		</div>
     </div>
 </div>
 {% endblock content %}
