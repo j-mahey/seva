@@ -160,7 +160,7 @@ def home(request):
             if vh_create_form.is_valid():
                 vo = vh_create_form.save(commit=False)
                 po = Person.objects.get(badge=request.POST.get("badge").upper(),
-                                        centre=Centre.objects.get(code=request.POST.get("centre")))
+                                        centre=Centre.objects.get(code=request.POST.get("centre").upper()))
                 if po:
                     vo.person = po
                     vo.save()
