@@ -243,7 +243,7 @@ def logout_user(request):
 @login_required
 def clock_in_report(request):
     response = HttpResponse(content_type="clock_in_report/csv")
-    response["Content-Disposition"] = "attachment; filename=.clock_in_reportcsv"
+    response["Content-Disposition"] = "attachment; filename=.clock_in_report.csv"
     writer = csv.writer(response, delimiter=",")
     writer.writerow(['CENTRE', 'BADGE', 'TYPE', 'FULL NAME', 'CONTACT NO', 'VEHICLE NO', 'VEHICLE TYPE', 'IN TIME'])
     
