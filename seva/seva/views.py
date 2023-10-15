@@ -249,8 +249,11 @@ def clock_in_report(request):
     
     mov_in = Movement.objects.filter(out_time=None)
     for i in mov_in:
-        writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.in_time])
-        
+        if i.vehicle is not None:
+            writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, i.vehicle.vehicle_no, i.vehicle.type, i.in_time])
+        else:
+            writer.writerow([i.person.centre, i.person.badge, i.person.type, i.person.full_name, i.person.contact_number, "", "", i.in_time])
+
     return response
 
 
